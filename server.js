@@ -24,7 +24,7 @@ app.configure(function () {
     store: sessionStore
   }))
   fs.readdirSync('routes').forEach(function(file) {
-    if ( file[0] == '.' ) return
+    if ( file[0] === '.' ) return
     var routeName = file.substr(0, file.indexOf('.'))
     require('./routes/' + routeName)(app)
   })
