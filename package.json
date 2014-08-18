@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "express": "~3.4.4",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "socket.io": "~0.9",
+    "connect": "~2.12.0",
+    "cookie": "~0.1.2",
+    "jade": "~1.5.0"
   },
   "devDependencies": {
     "gulp": "^3.8.7",
