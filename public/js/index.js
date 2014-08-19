@@ -9,5 +9,5 @@ function addParticipant(person) {
   participants.push(new PersonView(person))
 }
 
-var socket = io.connect('http://localhost:8000')
+var socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000')
 socket.on('enter-room', addParticipant)
