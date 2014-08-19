@@ -3,7 +3,7 @@ var rename = require('gulp-rename')
 var browserify = require('gulp-browserify')
 
 var paths = {
-  entry: 'public/js/app.js',
+  entry: 'public/js/main.js',
   scripts: 'public/js/**/*.js',
   dist: 'public/dist'
 }
@@ -19,6 +19,7 @@ gulp.task('js', function () {
         }
       }
     }))
+    .pipe(rename({basename: 'app'}))
     .pipe(gulp.dest(paths.dist))
 })
 

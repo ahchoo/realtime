@@ -1,34 +1,32 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+require('./index')
+
+},{"./index":2}],2:[function(require,module,exports){
 var ko = require('knockout')
+var PersonView = require('./model/person')
 
-var View = require('./view.js')
+var participants = ko.observableArray()
 
-var item = {
-  name: 'Macbook Pro Retina'
+ko.applyBindings({participants: participants})
+
+function addParticipant(person) {
+  participants.push(new PersonView(person))
 }
 
-var me = {
-  firstName: 'Sucker',
-  lastName: 'Shit',
-  timesLeft: 3
-}
+var socket = io.connect()
+socket.on('enter-room', addParticipant)
 
-ko.applyBindings(new View({
-  me: me
-}))
-
-},{"./view.js":2,"knockout":"xeEjJ6"}],2:[function(require,module,exports){
+},{"./model/person":3,"knockout":"xeEjJ6"}],3:[function(require,module,exports){
 var ko = require('knockout')
 
-function View(options) {
-  this.me = options.me
+module.exports = function (person) {
+  this.firstName = person.firstName
+  this.lastName = person.lastName
 
   this.fullName = ko.computed(function () {
-    return this.me.firstName + this.me.lastName
+    return this.firstName + ' ' + this.lastName
   }, this)
 }
-
-module.exports = View
 
 },{"knockout":"xeEjJ6"}],"xeEjJ6":[function(require,module,exports){
 (function (global){
