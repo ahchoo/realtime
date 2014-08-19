@@ -1,0 +1,7 @@
+deploy:
+  provider: openshift
+  user: ahchoo.tech@gmail.com
+  password: huskydowntheroad
+  domain: realtime-ahchoo.rhcloud.com
+  app:
+    production: realtime
