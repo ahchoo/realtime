@@ -9,5 +9,5 @@ function addParticipant(person) {
   participants.push(new PersonView(person))
 }
 
-var socket = io.connect('http://localhost')
+var socket = io.connect()
 socket.on('enter-room', addParticipant)
