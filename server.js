@@ -64,25 +64,25 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
 
 var sio = io.listen(server)
 
-sio.set('authorization', function (data, accept) {
-  if (!data.headers.cookie) {
-    return accept('Session cookie required.', false)
-  }
+// sio.set('authorization', function (data, accept) {
+//   if (!data.headers.cookie) {
+//     return accept('Session cookie required.', false)
+//   }
 
-  data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
-  data.sessionID = data.cookie['express.sid']
+//   data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
+//   data.sessionID = data.cookie['express.sid']
 
-  sessionStore.get(data.sessionID, function (err, session) {
-    if (err) {
-      return accept('Error in session store.', false)
-    } else if (!session) {
-      return accept('Session not found.', false)
-    }
+//   sessionStore.get(data.sessionID, function (err, session) {
+//     if (err) {
+//       return accept('Error in session store.', false)
+//     } else if (!session) {
+//       return accept('Session not found.', false)
+//     }
 
-    data.session = session
-    return accept(null, true)
-  })
-})
+//     data.session = session
+//     return accept(null, true)
+//   })
+// })
 
 sio.sockets.on('connection', function (socket) {
   var hs = socket.handshake
@@ -91,4 +91,8 @@ sio.sockets.on('connection', function (socket) {
   socket.on('disconnect', function () {
     console.log('A socket with sessionID ' + hs.sessionID + ' disconnected.')
   })
+
+  setInterval(function () {
+    socket.emit('enter-room', {firstName: 'Zhiying', lastName: 'Mai'})
+  }, 1000)
 })
