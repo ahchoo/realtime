@@ -100,7 +100,6 @@ sio.set('authorization', function (data, accept) {
 
 sio.sockets.on('connection', function (socket) {
   var hs = socket.handshake
-  console.log(hs);
   console.log('A socket with sessionID ' + hs.sessionID + ' connected.')
 
   socket.on('disconnect', function () {

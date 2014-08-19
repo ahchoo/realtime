@@ -22,10 +22,8 @@ module.exports = {
     return items
   },
   getById: function (itemID) {
-    console.log('itemID', itemID)
     for (var i = 0; i < items.length; i++) {
       var item = items[i]
-      console.log('item._id', item._id)
       if (item._id == itemID) {
         return item
       }
