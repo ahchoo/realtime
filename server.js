@@ -57,7 +57,7 @@ var server = http.createServer(app)
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
               process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
               function () {
-                console.log('server starting...')
+                console.log('Server started')
               })
 
 // Socket.io
@@ -66,7 +66,7 @@ var sio = io.listen(server)
 
 sio.set('authorization', function (data, accept) {
   if (!data.headers.cookie) {
-    return accept('Session cookie reqyured.', false)
+    return accept('Session cookie required.', false)
   }
 
   data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
