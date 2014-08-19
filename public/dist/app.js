@@ -13,7 +13,7 @@ function addParticipant(person) {
   participants.push(new PersonView(person))
 }
 
-var socket = io.connect()
+var socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000')
 socket.on('enter-room', addParticipant)
 
 },{"./model/person":3,"knockout":"xeEjJ6"}],3:[function(require,module,exports){
