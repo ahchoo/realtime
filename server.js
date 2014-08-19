@@ -7,6 +7,7 @@ var connect = require('connect')
 var io = require('socket.io')
 var cookie = require('cookie')
 var sessionStore = new connect.session.MemoryStore()
+var fs = require('fs')
 var SITE_SECRET = 'ahchoo web site'
 
 var app = express()
@@ -22,9 +23,15 @@ app.configure(function () {
     key: 'express.sid',
     store: sessionStore
   }))
+  fs.readdirSync('routes').forEach(function(file) {
+    if ( file[0] == '.' ) return
+    var routeName = file.substr(0, file.indexOf('.'))
+    require('./routes/' + routeName)(app)
+  })
 })
 
 app.configure('development', function () {
+  var Items = require('./models/Items')
   app.set('views', path.join(__dirname, '/demo-views'))
   app.use('/', express.static(path.join(__dirname, '/demo')))
   app.get('/', function (req, res) {
@@ -33,14 +40,21 @@ app.configure('development', function () {
     })
   })
   app.get('/demo-socket', function (req, res) {
-    var username = req.session.username
-    if (username) {
-      res.render('demo-socket', {
-        username: req.session.username
-      })
-    } else {
-      res.redirect('/')
-    }
+    res.render('demo-socket', {
+      username: req.session.username
+    })
+  })
+  app.get('/demo-items', function (req, res) {
+    res.render('demo-items', {
+      username: req.session.username,
+      items: Items.get()
+    })
+  })
+  app.get('/demo-item/:itemID', function (req, res) {
+    res.render('demo-item', {
+      username: req.session.username,
+      item: Items.getById(req.param('itemID', null))
+    })
   })
   app.post('/auth/login', function (req, res) {
     req.session.username = req.param('username')
@@ -86,6 +100,7 @@ sio.set('authorization', function (data, accept) {
 
 sio.sockets.on('connection', function (socket) {
   var hs = socket.handshake
+  console.log(hs);
   console.log('A socket with sessionID ' + hs.sessionID + ' connected.')
 
   socket.on('disconnect', function () {
