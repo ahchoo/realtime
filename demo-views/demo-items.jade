@@ -1,0 +1,11 @@
+extends index
+
+block script
+  script(src="/js/demo-items.js")
+
+block content
+  p This is the items(rooms) list
+  ul#items
+    each item, index in items
+      li
+        a(id="#{item._id}", href="/demo-item/#{item._id}") #{item.name}
