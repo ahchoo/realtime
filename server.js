@@ -31,7 +31,7 @@ app.configure(function () {
 })
 
 app.configure('development', function () {
-  var Items = require('./models/Items')
+  var Items = require('./lib/models/item')
   app.set('views', path.join(__dirname, '/demo-views'))
   app.use('/', express.static(path.join(__dirname, '/demo')))
   app.get('/', function (req, res) {
