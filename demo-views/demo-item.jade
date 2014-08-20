@@ -1,0 +1,11 @@
+extends index
+
+block content
+  if item
+    p
+      label Item Name:
+      span #{item.name}
+
+    input(type="hidden", value="#{item._id}")
+  else
+    p Invalid Item.
