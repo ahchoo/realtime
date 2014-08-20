@@ -3,6 +3,10 @@ language: node_js
 node_js:
   - 0.10
 
+before_script:
+  - npm install -g gulp
+  - gulp jshint
+
 deploy:
   provider: openshift
   user: ahchoo.tech@gmail.com
