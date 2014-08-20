@@ -107,6 +107,6 @@ sio.sockets.on('connection', function (socket) {
   })
 
   setInterval(function () {
-    socket.emit('enter-room', {firstName: 'Zhiying', lastName: 'Mai'})
+    socket.emit('enter-room', {firstName: 'Zoe', lastName: 'Mai'})
   }, 1000)
 })
