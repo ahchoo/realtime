@@ -13,7 +13,7 @@ var SITE_SECRET = 'ahchoo web site'
 var app = express()
 
 // production
-app.set('env', 'production')
+//app.set('env', 'production')
 
 app.configure(function () {
   app.set('view engine', 'jade')
@@ -106,7 +106,18 @@ sio.sockets.on('connection', function (socket) {
     console.log('A socket with sessionID ' + hs.sessionID + ' disconnected.')
   })
 
-  setInterval(function () {
-    socket.emit('enter-room', {firstName: 'Zoe', lastName: 'Mai'})
-  }, 1000)
+  var itemID = hs.query.itemID
+  if (!itemID) return
+
+  socket.on('item:start:' + itemID, function () {
+    var total = 100;
+    var tId = setInterval(function () {
+      socket.emit('item:countdown', {
+        countdown: total--
+      })
+      if (total < 0) {
+        clearInterval(tId)
+      }
+    }, 1000)
+  })
 })
