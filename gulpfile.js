@@ -20,7 +20,7 @@ gulp.task('js', function () {
           exports: 'ko'
         },
         'socket.io': {
-          path: '/socket.io/socket.io.js',
+          path: './node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js',
           exports: 'io'
         }
       }
