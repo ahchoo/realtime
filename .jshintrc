@@ -1,0 +1,11 @@
+{
+  "eqeqeq": true,
+  "eqnull": true,
+  "asi": true,
+  "unused": true,
+  "undef": true,
+  "indent": 2,
+  "camelcase": true,
+  "quotmark": "single",
+  "node": true
+}

@@ -1,4 +1,5 @@
 var ko = require('knockout')
+var io = require('socket.io')
 var PersonView = require('./model/person')
 
 var participants = ko.observableArray()
