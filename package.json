@@ -22,7 +22,8 @@
     "gulp-browserify": "^0.5.0",
     "gulp-rename": "^1.2.0",
     "browserify": "^4.2.3",
-    "browserify-shim": "^3.6.0"
+    "browserify-shim": "^3.6.0",
+    "gulp-jshint": "^1.8.4"
   },
   "bundleDependencies": [],
   "private": true,
