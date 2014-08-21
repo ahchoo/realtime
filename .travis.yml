@@ -8,6 +8,8 @@ before_script:
   - gulp jshint
 
 deploy:
+  on:
+    tags: true
   provider: openshift
   user: ahchoo.tech@gmail.com
   password: huskydowntheroad
