@@ -15,4 +15,4 @@ deploy:
   password: huskydowntheroad
   domain: ahchoo
   app:
-    production: realtime
+    master: realtime
