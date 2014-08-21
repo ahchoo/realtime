@@ -34,5 +34,5 @@ gulp.task('jshint', function () {
 
 gulp.task('watch', function () {
   gulp
-    .watch(paths.clientScripts, ['js'])
+    .watch(paths.clientScripts, ['build'])
 })
