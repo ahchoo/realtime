@@ -23,10 +23,10 @@ app.configure(function () {
     key: 'express.sid',
     store: sessionStore
   }))
-  fs.readdirSync('routes').forEach(function(file) {
+  fs.readdirSync('./lib/routes').forEach(function(file) {
     if ( file[0] === '.' ) return
     var routeName = file.substr(0, file.indexOf('.'))
-    require('./routes/' + routeName)(app)
+    require('./lib/routes/' + routeName)(app)
   })
 })
 

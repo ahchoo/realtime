@@ -18,10 +18,6 @@ gulp.task('js', function () {
         knockout: {
           path: './public/lib/knockout/knockout.js',
           exports: 'ko'
-        },
-        'socket.io': {
-          path: '/socket.io/socket.io.js',
-          exports: 'io'
         }
       }
     }))
