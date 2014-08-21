@@ -10,7 +10,7 @@ var paths = {
   dist: 'public/dist'
 }
 
-gulp.task('js', function () {
+gulp.task('build', function () {
   gulp
     .src(paths.entry)
     .pipe(browserify({
