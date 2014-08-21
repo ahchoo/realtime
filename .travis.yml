@@ -14,5 +14,4 @@ deploy:
   user: ahchoo.tech@gmail.com
   password: huskydowntheroad
   domain: ahchoo
-  app:
-    master: realtime
+  app: realtime
