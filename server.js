@@ -99,6 +99,7 @@ sio.set('authorization', function (data, accept) {
   })
 })
 
+// socket
 sio.sockets.on('connection', function (socket) {
   var hs = socket.handshake
   console.log(hs);
