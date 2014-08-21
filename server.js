@@ -109,14 +109,25 @@ sio.sockets.on('connection', function (socket) {
   var itemID = hs.query.itemID
   if (!itemID) return
 
+  var Items = require('./lib/models/item')
+
   socket.on('item:start:' + itemID, function () {
-    var total = 100;
+    var item = Items.getById(itemID)
+    if (!item || item.status === 'started') return
+
+    item.status = 'started'
     var tId = setInterval(function () {
-      socket.emit('item:countdown', {
-        countdown: total--
+      socket.broadcast.emit('item:countdown:' + itemID, {
+        countdown: item.countdown
       })
-      if (total < 0) {
+      socket.emit('item:countdown:' + itemID, {
+        countdown: item.countdown
+      })
+      item.countdown--
+      if (item.countdown < 0) {
         clearInterval(tId)
+        item.status = 'ended'
+        item.countdown = 100
       }
     }, 1000)
   })

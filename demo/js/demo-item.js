@@ -7,7 +7,7 @@ $(function () {
     console.log('Connect success.')
     socket.emit('item:start:' + itemID);
   })
-  socket.on('item:countdown', function (data) {
+  socket.on('item:countdown:' + itemID, function (data) {
     console.log('item count down', data.countdown)
   })
 })
