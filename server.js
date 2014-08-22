@@ -107,7 +107,9 @@ sio.sockets.on('connection', function (socket) {
     if (!item || item.status === 'started') return
 
     item.status = 'started'
+    console.log('item:countdown:start', itemID)
     var tId = setInterval(function () {
+      console.log('item:countdown:counting', itemID, item.countdown)
       socket.broadcast.emit('item:countdown:' + itemID, {
         countdown: item.countdown
       })
@@ -119,6 +121,7 @@ sio.sockets.on('connection', function (socket) {
         clearInterval(tId)
         item.status = 'ended'
         item.countdown = 100
+        console.log('item:countdown:end', itemID)
       }
     }, 1000)
   })
