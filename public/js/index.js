@@ -11,5 +11,16 @@ function addParticipant(person) {
   participants.push(new PersonView(person))
 }
 
-var socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000')
+var currentUri = window.location.href
+
+var socket
+
+// need different config for local and production env
+if (currentUri.indexOf('127.0.0.1') !== -1 ||
+    currentUri.indexOf('localhost') !== -1) {
+  socket = io.connect()
+} else {
+  socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000')
+}
+
 socket.on('enter-room', addParticipant)
