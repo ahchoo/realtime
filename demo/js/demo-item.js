@@ -1,7 +1,9 @@
 $(function () {
   var itemID = $('#item_id').val()
-  var socket = io.connect(null, {
-    query: 'itemID=' + itemID
+  if (!itemID) return
+
+  var socket = io({
+    'query': 'itemID=' + itemID
   })
   socket.on('connect', function () {
     console.log('Connect success.')
