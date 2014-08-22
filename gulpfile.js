@@ -13,14 +13,7 @@ var paths = {
 gulp.task('build', function () {
   gulp
     .src(paths.entry)
-    .pipe(browserify({
-      shim: {
-        knockout: {
-          path: './public/lib/knockout/knockout.js',
-          exports: 'ko'
-        }
-      }
-    }))
+    .pipe(browserify())
     .pipe(rename({basename: 'app'}))
     .pipe(gulp.dest(paths.dist))
 })

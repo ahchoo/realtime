@@ -20,7 +20,9 @@
     "cookie": "~0.1.2",
     "jade": "~1.5.0",
     "mongoose": "~3.8.15",
-    "node-uuid": "^1.4.1"
+    "node-uuid": "^1.4.1",
+    "underscore.string": "^2.3.3",
+    "knockout": "^3.2.0"
   },
   "devDependencies": {
     "gulp": "^3.8.7",
