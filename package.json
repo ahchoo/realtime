@@ -1,6 +1,6 @@
 {
   "name": "ahchoo-realtime",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "xixi",
   "keywords": [],
   "author": {},
@@ -8,10 +8,14 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
+  "scripts": {
+    "prepublish": "gulp build"
+  },
   "dependencies": {
     "express": "~3.4.4",
     "underscore": "^1.6.0",
-    "socket.io": "~0.9",
+    "socket.io": "^1.0.6",
+    "socket.io-client": "^1.0.6",
     "connect": "~2.12.0",
     "cookie": "~0.1.2",
     "jade": "~1.5.0",

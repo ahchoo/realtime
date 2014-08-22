@@ -10,7 +10,7 @@ var paths = {
   dist: 'public/dist'
 }
 
-gulp.task('js', function () {
+gulp.task('build', function () {
   gulp
     .src(paths.entry)
     .pipe(browserify({
@@ -34,5 +34,5 @@ gulp.task('jshint', function () {
 
 gulp.task('watch', function () {
   gulp
-    .watch(paths.clientScripts, ['js'])
+    .watch(paths.clientScripts, ['build'])
 })

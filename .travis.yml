@@ -8,9 +8,11 @@ before_script:
   - gulp jshint
 
 deploy:
+  on:
+    tags: true
+    all_branches: true
   provider: openshift
   user: ahchoo.tech@gmail.com
   password: huskydowntheroad
   domain: ahchoo
-  app:
-    production: realtime
+  app: realtime
