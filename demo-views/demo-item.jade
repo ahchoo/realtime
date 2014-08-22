@@ -9,6 +9,15 @@ block content
     p
       label Item Name:
       span #{item.title}
+    p
+      label Item Status:
+      span#status #{item.status}
+    if item.status === 'initialize'
+      p
+        button#start Start
+    else if item.status === 'ended'
+      p
+        button#restart Restart
 
     input#item_id(type="hidden", value="#{item._id}")
   else
