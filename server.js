@@ -12,9 +12,6 @@ var SITE_SECRET = 'ahchoo web site'
 
 var app = express()
 
-// production
-//app.set('env', 'production')
-
 app.configure(function () {
   app.set('view engine', 'jade')
   app.use(express.bodyParser())
@@ -30,40 +27,40 @@ app.configure(function () {
   })
 })
 
-app.configure('development', function () {
+app.configure(function () {
   var Items = require('./lib/models/item')
   app.set('views', path.join(__dirname, '/demo-views'))
-  app.use('/', express.static(path.join(__dirname, '/demo')))
-  app.get('/', function (req, res) {
+  app.use('/demo', express.static(path.join(__dirname, '/demo')))
+  app.get('/demo', function (req, res) {
     res.render('index', {
       username: req.session.username
     })
   })
-  app.get('/demo-socket', function (req, res) {
+  app.get('/demo/demo-socket', function (req, res) {
     res.render('demo-socket', {
       username: req.session.username
     })
   })
-  app.get('/demo-items', function (req, res) {
+  app.get('/demo/demo-items', function (req, res) {
     res.render('demo-items', {
       username: req.session.username,
       items: Items.get()
     })
   })
-  app.get('/demo-item/:itemID', function (req, res) {
+  app.get('/demo/demo-item/:itemID', function (req, res) {
     res.render('demo-item', {
       username: req.session.username,
       item: Items.getById(req.param('itemID', null))
     })
   })
-  app.post('/auth/login', function (req, res) {
+  app.post('/demo/auth/login', function (req, res) {
     req.session.username = req.param('username')
     res.redirect('/')
   })
 })
 
-app.configure('production', function () {
-  app.set('views', path.join(__dirname, '/views'))
+app.configure(function () {
+  //app.set('views', path.join(__dirname, '/views'))
   app.use('/', express.static(path.join(__dirname, '/public')))
 })
 
