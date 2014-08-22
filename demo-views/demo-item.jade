@@ -1,11 +1,15 @@
 extends index
 
+block script
+  script(src="/socket.io/socket.io.js")
+  script(src="/demo/js/demo-item.js")
+
 block content
   if item
     p
       label Item Name:
-      span #{item.name}
+      span #{item.title}
 
-    input(type="hidden", value="#{item._id}")
+    input#item_id(type="hidden", value="#{item._id}")
   else
     p Invalid Item.

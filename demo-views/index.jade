@@ -1,14 +1,14 @@
 html
   head
     title MaiZhiying Demo
-    script(src="/js/jquery-1.11.1.min.js")
+    script(src="/demo/js/jquery-1.11.1.min.js")
     block script
   body
     p Hello World
     if username
       p Your are #{username}
     else
-      form(action="/auth/login", method="post")
+      form(action="/demo/auth/login", method="post")
         label Enter your name:
         input(type="text", name="username", value="shit")
         input(type="submit", value="OK")
@@ -16,8 +16,8 @@ html
     p Demo List:
     ul
       li
-        a(href="/demo-socket/") Socket Demo
+        a(href="/demo/demo-socket/") Socket Demo
       li
-        a(href="/demo-items/") Items Demo
+        a(href="/demo/demo-items/") Items Demo
 
     block content

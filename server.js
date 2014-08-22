@@ -12,9 +12,6 @@ var SITE_SECRET = 'ahchoo web site'
 
 var app = express()
 
-// production
-app.set('env', 'production')
-
 app.configure(function () {
   app.set('view engine', 'jade')
   app.use(express.bodyParser())
@@ -25,46 +22,45 @@ app.configure(function () {
   }))
   fs.readdirSync('./lib/routes').forEach(function(file) {
     if ( file[0] === '.' ) return
-
     var routeName = file.substr(0, file.indexOf('.'))
     require('./lib/routes/' + routeName)(app)
   })
 })
 
-app.configure('development', function () {
-  var Items = require('./models/item')
+app.configure(function () {
+  var Items = require('./lib/models/item')
   app.set('views', path.join(__dirname, '/demo-views'))
-  app.use('/', express.static(path.join(__dirname, '/demo')))
-  app.get('/', function (req, res) {
+  app.use('/demo', express.static(path.join(__dirname, '/demo')))
+  app.get('/demo', function (req, res) {
     res.render('index', {
       username: req.session.username
     })
   })
-  app.get('/demo-socket', function (req, res) {
+  app.get('/demo/demo-socket', function (req, res) {
     res.render('demo-socket', {
       username: req.session.username
     })
   })
-  app.get('/demo-items', function (req, res) {
+  app.get('/demo/demo-items', function (req, res) {
     res.render('demo-items', {
       username: req.session.username,
       items: Items.get()
     })
   })
-  app.get('/demo-item/:itemID', function (req, res) {
+  app.get('/demo/demo-item/:itemID', function (req, res) {
     res.render('demo-item', {
       username: req.session.username,
       item: Items.getById(req.param('itemID', null))
     })
   })
-  app.post('/auth/login', function (req, res) {
+  app.post('/demo/auth/login', function (req, res) {
     req.session.username = req.param('username')
     res.redirect('/')
   })
 })
 
-app.configure('production', function () {
-  app.set('views', path.join(__dirname, '/views'))
+app.configure(function () {
+  //app.set('views', path.join(__dirname, '/views'))
   app.use('/', express.static(path.join(__dirname, '/public')))
 })
 
@@ -79,36 +75,51 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
 
 var sio = io.listen(server)
 
-sio.set('authorization', function (data, accept) {
+sio.use(function (socket, next) {
+  var data = socket.request
   if (!data.headers.cookie) {
-    return accept('Session cookie required.', false)
+    next(new Error('Session cookie required.'))
+  } else {
+    data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
+    data.sessionID = data.cookie['express.sid']
+    sessionStore.get(data.sessionID, function (err, session) {
+      if (err) {
+        next(new Error('Error in session store.'))
+      } else if (!session) {
+        next(new Error('Session not found.'))
+      } else {
+        data.session = session
+        next()
+      }
+    })
   }
-
-  data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
-  data.sessionID = data.cookie['express.sid']
-
-  sessionStore.get(data.sessionID, function (err, session) {
-    if (err) {
-      return accept('Error in session store.', false)
-    } else if (!session) {
-      return accept('Session not found.', false)
-    }
-
-    data.session = session
-    return accept(null, true)
-  })
 })
 
 sio.sockets.on('connection', function (socket) {
-  var hs = socket.handshake
-  console.log(hs);
-  console.log('A socket with sessionID ' + hs.sessionID + ' connected.')
+  // TODO use the private '_query'
+  var itemID = socket.request._query.itemID
+  if (!itemID) return
 
-  socket.on('disconnect', function () {
-    console.log('A socket with sessionID ' + hs.sessionID + ' disconnected.')
+  var Items = require('./lib/models/item')
+
+  socket.on('item:start:' + itemID, function () {
+    var item = Items.getById(itemID)
+    if (!item || item.status === 'started') return
+
+    item.status = 'started'
+    var tId = setInterval(function () {
+      socket.broadcast.emit('item:countdown:' + itemID, {
+        countdown: item.countdown
+      })
+      socket.emit('item:countdown:' + itemID, {
+        countdown: item.countdown
+      })
+      item.countdown--
+      if (item.countdown < 0) {
+        clearInterval(tId)
+        item.status = 'ended'
+        item.countdown = 100
+      }
+    }, 1000)
   })
-
-  setInterval(function () {
-    socket.emit('enter-room', {firstName: 'Zoe', lastName: 'Mai'})
-  }, 1000)
 })
