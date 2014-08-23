@@ -17,7 +17,7 @@ if (env.OPENSHIFT_APP_NAME) {
 
   config = {
     database: 'realtime',
-    username: 'admin',
+    username: 'husky',
     password: '1234',
     host: '127.0.0.1',
     port: 27017,
