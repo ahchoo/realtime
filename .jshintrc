@@ -8,7 +8,5 @@
   "camelcase": true,
   "quotmark": "single",
   "node": true,
-  "globals": {
-    "io": true
-  }
+  "browser": true
 }
