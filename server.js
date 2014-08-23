@@ -7,11 +7,10 @@ var cookieParser = require('cookie-parser')
 var expressSession = require('express-session')
 var path = require('path')
 var connect = require('connect')
-var io = require('socket.io')
-var cookie = require('cookie')
+
 var sessionStore = new connect.session.MemoryStore()
-var fs = require('fs')
-var SITE_SECRET = 'ahchoo web site'
+
+process.env.AHCHOO_SITE_SECRET = 'ahchoo web site'
 
 // init db connection
 require('./lib/connect-db')()
@@ -19,56 +18,26 @@ require('./lib/connect-db')()
 var app = express()
 
 app.set('view engine', 'jade')
+
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-// app.use(cookieParser(SITE_SECRET))
-// app.use(expressSession({
-  // key: 'express.sid',
-  // store: sessionStore
-// }))
+app.use(cookieParser(process.env.AHCHOO_SITE_SECRET))
 
-// fs.readdirSync('./lib/routes').forEach(function(file) {
-  // if ( file[0] === '.' ) return
-  // var routeName = file.substr(0, file.indexOf('.'))
-  // require('./lib/routes/' + routeName)(app)
-// })
+app.use(expressSession({
+  key: 'express.sid',
+  store: sessionStore
+}))
 
-// init routes
+// api routes
 require('./lib/routes')(app)
 
-// var Items = require('./lib/models/item')
-// app.set('views', path.join(__dirname, '/demo-views'))
-// app.use('/demo', express.static(path.join(__dirname, '/demo')))
-// app.get('/demo', function (req, res) {
-//   res.render('index', {
-//     username: req.session.username
-//   })
-// })
-// app.get('/demo/demo-socket', function (req, res) {
-//   res.render('demo-socket', {
-//     username: req.session.username
-//   })
-// })
-// app.get('/demo/demo-items', function (req, res) {
-//   res.render('demo-items', {
-//     username: req.session.username,
-//     items: Items.get()
-//   })
-// })
-// app.get('/demo/demo-item/:itemID', function (req, res) {
-//   res.render('demo-item', {
-//     username: req.session.username,
-//     item: Items.getById(req.param('itemID', null))
-//   })
-// })
-// app.post('/demo/auth/login', function (req, res) {
-//   req.session.username = req.param('username')
-//   res.redirect('/')
-// })
+// templates
+app.set('views', path.join(__dirname, '/demo-views'))
 
-//app.set('views', path.join(__dirname, '/views'))
+// serve static
+app.use('/demo', express.static(path.join(__dirname, '/demo')))
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 var server = http.createServer(app)
@@ -77,3 +46,5 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
               function () {
                 console.log('Server started')
               })
+
+require('./lib/socket')(server, sessionStore)
