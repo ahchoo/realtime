@@ -10,6 +10,9 @@ var sessionStore = new connect.session.MemoryStore()
 var fs = require('fs')
 var SITE_SECRET = 'ahchoo web site'
 
+// init db connection
+require('./lib/connect-db')()
+
 var app = express()
 
 app.configure(function () {

@@ -6,21 +6,14 @@ var browserify = require('gulp-browserify')
 var paths = {
   entry: 'public/js/main.js',
   clientScripts: 'public/js/**/*.js',
-  serverScripts: ['server.js', 'lib/**/*.js'],
+  serverScripts: ['server.js', 'lib/**/*.js', 'config/**/*.js'],
   dist: 'public/dist'
 }
 
 gulp.task('build', function () {
   gulp
     .src(paths.entry)
-    .pipe(browserify({
-      shim: {
-        knockout: {
-          path: './public/lib/knockout/knockout.js',
-          exports: 'ko'
-        }
-      }
-    }))
+    .pipe(browserify())
     .pipe(rename({basename: 'app'}))
     .pipe(gulp.dest(paths.dist))
 })
@@ -30,6 +23,7 @@ gulp.task('jshint', function () {
     .src(paths.serverScripts.concat(paths.clientScripts))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
+    .pipe(jshint.reporter('fail'))
 })
 
 gulp.task('watch', function () {
