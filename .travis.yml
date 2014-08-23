@@ -8,12 +8,9 @@ before_script:
   - gulp lint
 
 deploy:
-  on:
-    tags: true
-    all_branches: true
-  deployment_branch: production
   provider: openshift
   user: ahchoo.tech@gmail.com
   password: huskydowntheroad
   domain: ahchoo
-  app: realtime
+  app:
+    production: realtime
