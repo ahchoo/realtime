@@ -1,4 +1,3 @@
-var _ = require('underscore')
 var env = process.env
 
 var config
@@ -16,21 +15,14 @@ if (env.OPENSHIFT_APP_NAME) {
 
 } else {
 
-  try {
-    config = require('./mongo-dev')
-  } catch (e) {
-    config = {}
-    console.warn('Failed to read mongo-dev.js, use default db settings')
-  }
-
-  _.defaults(config, {
+  config = {
     database: 'realtime',
     username: 'admin',
     password: '1234',
     host: '127.0.0.1',
     port: 27017,
     authdb: 'admin'
-  })
+  }
 
 }
 
