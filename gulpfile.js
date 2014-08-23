@@ -18,7 +18,7 @@ gulp.task('build', function () {
     .pipe(gulp.dest(paths.dist))
 })
 
-gulp.task('jshint', function () {
+gulp.task('lint', function () {
   gulp
     .src(paths.serverScripts.concat(paths.clientScripts))
     .pipe(jshint())
