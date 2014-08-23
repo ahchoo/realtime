@@ -5,8 +5,17 @@ var browserify = require('gulp-browserify')
 
 var paths = {
   entry: 'public/js/main.js',
-  clientScripts: 'public/js/**/*.js',
-  serverScripts: ['server.js', 'lib/**/*.js', 'config/**/*.js'],
+  client: {
+    scripts: 'public/js/**/*.js'
+  },
+  server: {
+    scripts: [
+      'server.js',
+      'lib/**/*.js',
+      'config/**/*.js',
+      'fixture/**/*.js'
+    ]
+  },
   dist: 'public/dist'
 }
 
@@ -20,7 +29,7 @@ gulp.task('build', function () {
 
 gulp.task('lint', function () {
   gulp
-    .src(paths.serverScripts.concat(paths.clientScripts))
+    .src(paths.server.scripts.concat(paths.client.scripts))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'))
@@ -29,4 +38,13 @@ gulp.task('lint', function () {
 gulp.task('watch', function () {
   gulp
     .watch(paths.clientScripts, ['build'])
+})
+
+gulp.task('initdb', function () {
+  require('./fixture')()
+
+  // I know it's stupid...
+  setTimeout(function () {
+    process.exit()
+  }, 2000)
 })

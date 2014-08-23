@@ -7,11 +7,10 @@ var cookieParser = require('cookie-parser')
 var expressSession = require('express-session')
 var path = require('path')
 var connect = require('connect')
-var io = require('socket.io')
-var cookie = require('cookie')
+
 var sessionStore = new connect.session.MemoryStore()
-var fs = require('fs')
-var SITE_SECRET = 'ahchoo web site'
+
+process.env.AHCHOO_SITE_SECRET = 'ahchoo web site'
 
 // init db connection
 require('./lib/connect-db')()
@@ -19,49 +18,26 @@ require('./lib/connect-db')()
 var app = express()
 
 app.set('view engine', 'jade')
-app.use(bodyParser())
-app.use(cookieParser(SITE_SECRET))
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+app.use(cookieParser(process.env.AHCHOO_SITE_SECRET))
+
 app.use(expressSession({
   key: 'express.sid',
   store: sessionStore
 }))
-fs.readdirSync('./lib/routes').forEach(function(file) {
-  if ( file[0] === '.' ) return
-  var routeName = file.substr(0, file.indexOf('.'))
-  require('./lib/routes/' + routeName)(app)
-})
 
-var Items = require('./lib/models/item')
+// api routes
+require('./lib/routes')(app)
+
+// templates
 app.set('views', path.join(__dirname, '/demo-views'))
-app.use('/demo', express.static(path.join(__dirname, '/demo')))
-app.get('/demo', function (req, res) {
-  res.render('index', {
-    username: req.session.username
-  })
-})
-app.get('/demo/demo-socket', function (req, res) {
-  res.render('demo-socket', {
-    username: req.session.username
-  })
-})
-app.get('/demo/demo-items', function (req, res) {
-  res.render('demo-items', {
-    username: req.session.username,
-    items: Items.get()
-  })
-})
-app.get('/demo/demo-item/:itemID', function (req, res) {
-  res.render('demo-item', {
-    username: req.session.username,
-    item: Items.getById(req.param('itemID', null))
-  })
-})
-app.post('/demo/auth/login', function (req, res) {
-  req.session.username = req.param('username')
-  res.redirect('/')
-})
 
-//app.set('views', path.join(__dirname, '/views'))
+// serve static
+app.use('/demo', express.static(path.join(__dirname, '/demo')))
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 var server = http.createServer(app)
@@ -71,58 +47,4 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
                 console.log('Server started')
               })
 
-// Socket.io
-
-var sio = io.listen(server)
-
-sio.use(function (socket, next) {
-  var data = socket.request
-  if (!data.headers.cookie) {
-    next(new Error('Session cookie required.'))
-  } else {
-    data.cookie = connect.utils.parseSignedCookies(cookie.parse(data.headers.cookie), SITE_SECRET)
-    data.sessionID = data.cookie['express.sid']
-    sessionStore.get(data.sessionID, function (err, session) {
-      if (err) {
-        next(new Error('Error in session store.'))
-      } else if (!session) {
-        next(new Error('Session not found.'))
-      } else {
-        data.session = session
-        next()
-      }
-    })
-  }
-})
-
-sio.sockets.on('connection', function (socket) {
-  // TODO use the private '_query'
-  var itemID = socket.request._query.itemID
-  if (!itemID) return
-
-  var Items = require('./lib/models/item')
-
-  socket.on('item:start:' + itemID, function () {
-    var item = Items.getById(itemID)
-    if (!item || item.status === 'started') return
-
-    item.status = 'started'
-    console.log('item:countdown:start', itemID)
-    var tId = setInterval(function () {
-      console.log('item:countdown:counting', itemID, item.countdown)
-      socket.broadcast.emit('item:countdown:' + itemID, {
-        countdown: item.countdown
-      })
-      socket.emit('item:countdown:' + itemID, {
-        countdown: item.countdown
-      })
-      item.countdown--
-      if (item.countdown < 0) {
-        clearInterval(tId)
-        item.status = 'ended'
-        item.countdown = 100
-        console.log('item:countdown:end', itemID)
-      }
-    }, 1000)
-  })
-})
+require('./lib/socket')(server, sessionStore)
