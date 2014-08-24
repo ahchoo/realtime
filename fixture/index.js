@@ -1,6 +1,7 @@
 module.exports = function () {
 
   var _ = require('underscore')
+  var md5 = require('MD5')
 
   // init connection
   require('../lib/connect-db')()
@@ -11,8 +12,8 @@ module.exports = function () {
   // User fixture
 
   initCollection('User', [
-    {username: 'fu', password: '123'},
-    {username: 'mother', password: 'fucker'}
+    {username: 'fu', password: md5('123')},
+    {username: 'admin', password: md5('husky')}
   ])
 
   // Game fixture
