@@ -33,6 +33,10 @@ app.use(expressSession({
 // api routes
 require('./lib/routes')(app)
 
+
+// error handling
+app.use(require('./lib/middlewares/error-handler')())
+
 // templates
 app.set('views', path.join(__dirname, '/demo-views'))
 
