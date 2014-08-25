@@ -1,23 +1,13 @@
 extends index
 
-block script
-  script(src="/socket.io/socket.io.js")
-  script(src="/demo/js/demo-item.js")
-
 block content
   if item
     p
       label Item Name:
       span #{item.title}
     p
-      label Item Status:
-      span#status #{item.status}
-    if item.status === 'initialize'
-      p
-        button#start Start
-    else if item.status === 'ended'
-      p
-        button#restart Restart
+      label Item Price:
+      span #{item.price}
 
     input#item_id(type="hidden", value="#{item._id}")
   else

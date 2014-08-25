@@ -17,6 +17,7 @@ module.exports = function () {
   ])
 
   // Game fixture
+  initCollection('Game', [])
 
   // Item fixture
 
