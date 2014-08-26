@@ -8,15 +8,20 @@ $(function () {
   socket.on('connect', function () {
     console.log('Connect success.')
   })
-  socket.on('game:countdown:' + gameId, function (data) {
-    console.log('game count down', data.countdown)
 
+  socket.on('game:start:' + gameId, function (countdown) {
     $('#start').parent().text('Game Started.')
-    $('#countdown').text(data.countdown)
+    var tId = setInterval(function () {
+      $('#countdown').text(countdown)
+      countdown--
+      if (countdown < 0) {
+        clearInterval(tId)
+      }
+    }, 1000)
+  })
 
-    if (data.countdown === 0) {
-      window.location.reload()
-    }
+  socket.on('game:end:' + gameId, function () {
+    window.location.reload()
   })
 
   // Events
