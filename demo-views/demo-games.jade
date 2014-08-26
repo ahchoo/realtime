@@ -5,7 +5,7 @@ block content
     p Games:
     ul#games
       each game in games
-        li(id="#{game._id}") #{game._id} - #{game.itemId} - #{game.status} - #{game.capacity} 
+        li(id="#{game._id}") #{game._id} - #{game.item.title} - #{game.status} - #{game.capacity} 
           a(href="/demo/demo-game/#{game._id}") Enter This Game!
   else
     p No games.
