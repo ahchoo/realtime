@@ -31,8 +31,7 @@ app.use(expressSession({
 }))
 
 // api routes
-require('./lib/routes')(app)
-
+app.use(require('./lib/routes'))
 
 // error handling
 app.use(require('./lib/middlewares/error-handler')())
