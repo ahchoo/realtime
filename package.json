@@ -36,10 +36,11 @@
     "browserify-shim": "^3.6.0",
     "gulp-jshint": "^1.8.4",
     "gulp-mocha": "~1.0.0",
-    "expect": "~0.1.1",
     "should": "~4.0.4",
     "mocha": "~1.21.4",
-    "supertest": "~0.13.0"
+    "supertest": "~0.13.0",
+    "proxyquire": "~1.0.1",
+    "expect.js": "~0.3.1"
   },
   "bundleDependencies": [],
   "private": true,
