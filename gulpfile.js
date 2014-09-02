@@ -22,15 +22,17 @@ var paths = {
 gulp.task('build', function () {
   gulp
     .src(paths.entry)
-    .pipe(browserify())
+    .pipe(browserify().on('prebundle', function (bundler) {
+      bundler.require('../lib/window', {expose: 'window'})
+    }))
     .pipe(rename({basename: 'app'}))
     .pipe(gulp.dest(paths.dist))
 
-  gulp
-    .src('public/login/index.src.js')
-    .pipe(browserify())
-    .pipe(rename('index.js'))
-    .pipe(gulp.dest('public/login/'))
+  // gulp
+  //   .src('public/login/index.src.js')
+  //   .pipe(browserify())
+  //   .pipe(rename('index.js'))
+  //   .pipe(gulp.dest('public/login/'))
 })
 
 gulp.task('lint', function () {
