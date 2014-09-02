@@ -1,6 +1,5 @@
 var expect = require('expect.js')
 var request = require('supertest')
-var proxyquire = require('proxyquire')
 
 describe('Routes test', function () {
   describe('Game', function () {
@@ -8,25 +7,22 @@ describe('Routes test', function () {
     var item
 
     before(function (done) {
-      var connectDB = proxyquire('../../lib/connect-db', {
-        '../config/mongo': require('../../test/config/mongo')
-      })
-      proxyquire('../../fixture', {
-        '../lib/connect-db': connectDB
-      })()
-      app = proxyquire('../../app', {
-        '../lib/connect-db': connectDB
-      })
+      require('mockgoose')(require('mongoose'))
+      require('../../fixture')()
 
       setTimeout(function () {
-        // TODO stupid too...
-        request(app)
-          .get('/api/items')
-          .end(function (err, res) {
-            item = res.body.data[0]
-            done()
-          })
-      }, 1000)
+        require('mongoose').disconnect()
+        app = require('../../app')
+        setTimeout(function () {
+          // TODO stupid too...
+          request(app)
+            .get('/api/items')
+            .end(function (err, res) {
+              item = res.body.data[0]
+              done()
+            })
+        }, 100)
+      }, 100)
     })
 
     after(function () {
