@@ -5,9 +5,9 @@ var browserify = require('gulp-browserify')
 var mocha = require('gulp-mocha')
 
 var paths = {
-  entry: 'public/js/main.js',
+  entry: 'public/js/index.js',
   client: {
-    scripts: 'public/js/**/*.js'
+    scripts: ['public/js/**/*.js', 'public/lib/**/*.js']
   },
   server: {
     scripts: [
@@ -27,12 +27,6 @@ gulp.task('build', function () {
     .pipe(browserify())
     .pipe(rename({basename: 'app'}))
     .pipe(gulp.dest(paths.dist))
-
-  gulp
-    .src('public/login/index.src.js')
-    .pipe(browserify())
-    .pipe(rename('index.js'))
-    .pipe(gulp.dest('public/login/'))
 })
 
 gulp.task('lint', function () {
@@ -45,7 +39,7 @@ gulp.task('lint', function () {
 
 gulp.task('watch', function () {
   gulp
-    .watch(paths.clientScripts, ['build'])
+    .watch(paths.client.scripts, ['build'])
 })
 
 gulp.task('initdb', function () {
