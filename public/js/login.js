@@ -11,7 +11,7 @@ module.exports = function (el) {
       var password = md5(this.password())
 
       http({
-        method: 'post',
+        method: 'POST',
         path: '/api/auth',
         body: 'username=' + username + '&password=' + password
       }).then(function (res) {
