@@ -2,6 +2,7 @@ module.exports = function (el) {
   var md5 = require('MD5')
   var http = require('../lib/http')
   var ko = require('knockout')
+  var cookie = require('cookie-cutter')
 
   ko.applyBindings({
     username: ko.observable(),
@@ -15,13 +16,15 @@ module.exports = function (el) {
         path: '/api/auth',
         body: 'username=' + username + '&password=' + password
       }).then(function (res) {
-        var data = JSON.parse(res)
+        res = JSON.parse(res)
 
-        if (data.error) {
-          window.alert(data.error.message)
-        } else {
-          window.alert('login succeed')
+        if (res.error) {
+          window.alert(res.error.message)
+          return
         }
+
+        window.alert('login succeed')
+        cookie.set('ahchoo_token', res.data.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
       })
     }
   }, el)
