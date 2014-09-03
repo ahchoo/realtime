@@ -1,10 +1,5 @@
 var pathToRegexp = require('path-to-regexp')
 
-// feature detection
-// if (window.history == null) {
-  // throw new Error('You are using an outdated browser, please upgrade to latest version.')
-// }
-
 // list of routes
 var routes = []
 
@@ -35,7 +30,9 @@ Route.prototype.match = function (url) {
 }
 
 Route.prototype.handle = function (url, params) {
-  histroy.pushState(params, '', url)
+  if (url !== window.location.pathname) {
+    history.pushState(params, '', url)
+  }
 
   this.handler && this.handler(params)
 }
@@ -56,7 +53,7 @@ exports.use = function (url, handler) {
   return this
 }
 
-exports.goto = function (url, params) {
+exports.goto = function (url) {
   var i, j
 
   for (i = 0; i < routes.length; i++) {
@@ -85,9 +82,15 @@ exports.go = function (index) {
   history.go(index)
 }
 
-exports.reload = function () {}
+exports.reload = function () {
+  exports.goto(window.location.pathname)
+}
 
 
-window.addEventListener('onpopstate', function () {
-  console.log('pop state')
-})
+// window.addEventListener('onpopstate', function () {
+  // console.log('pop state')
+// })
+
+window.onload = function () {
+  exports.goto(window.location.pathname)
+}
