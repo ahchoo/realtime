@@ -15,7 +15,7 @@ module.exports = function (el) {
         path: '/api/auth',
         body: 'username=' + username + '&password=' + password
       }).then(function (res) {
-        data = JSON.parse(res)
+        var data = JSON.parse(res)
 
         if (data.error) {
           window.alert(data.error.message)

@@ -34,7 +34,7 @@ Route.prototype.handle = function (url, params) {
     history.pushState(params, '', url)
   }
 
-  this.handler && this.handler(params)
+  if (this.handler) { this.handler(params) }
 }
 
 // exports routes array, for testing purpose
@@ -54,7 +54,7 @@ exports.use = function (url, handler) {
 }
 
 exports.goto = function (url) {
-  var i, j
+  var i
 
   for (i = 0; i < routes.length; i++) {
     var route = routes[i]
