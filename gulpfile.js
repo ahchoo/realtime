@@ -49,16 +49,15 @@ gulp.task('watch', function () {
 })
 
 gulp.task('initdb', function () {
-  require('./fixture')()
-
-  // I know it's stupid...
-  setTimeout(function () {
-    process.exit()
-  }, 2000)
+  require('./fixture')(function () {
+    require('mongoose').disconnect()
+  })
 })
 
 gulp.task('test', function () {
   gulp
     .src(paths.test)
-    .pipe(mocha())
+    .pipe(mocha({
+      timeout: 5000
+    }))
 })

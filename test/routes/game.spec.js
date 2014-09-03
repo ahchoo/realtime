@@ -8,21 +8,17 @@ describe('Routes test', function () {
 
     before(function (done) {
       require('mockgoose')(require('mongoose'))
-      require('../../fixture')()
-
-      setTimeout(function () {
-        require('mongoose').disconnect()
-        app = require('../../app')
-        setTimeout(function () {
-          // TODO stupid too...
+      require('../../fixture')(function () {
+        require('mongoose').disconnect(function () {
+          app = require('../../app')
           request(app)
             .get('/api/items')
             .end(function (err, res) {
               item = res.body.data[0]
               done()
             })
-        }, 100)
-      }, 100)
+        })
+      })
     })
 
     after(function () {
