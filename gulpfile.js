@@ -2,6 +2,7 @@ var gulp = require('gulp')
 var rename = require('gulp-rename')
 var jshint = require('gulp-jshint')
 var browserify = require('gulp-browserify')
+var mocha = require('gulp-mocha')
 
 var paths = {
   entry: 'public/js/index.js',
@@ -16,7 +17,8 @@ var paths = {
       'fixture/**/*.js'
     ]
   },
-  dist: 'public/dist'
+  dist: 'public/dist',
+  test: 'test/**/*.spec.js'
 }
 
 gulp.task('build', function () {
@@ -41,10 +43,15 @@ gulp.task('watch', function () {
 })
 
 gulp.task('initdb', function () {
-  require('./fixture')()
+  require('./fixture')(function () {
+    require('mongoose').disconnect()
+  })
+})
 
-  // I know it's stupid...
-  setTimeout(function () {
-    process.exit()
-  }, 2000)
+gulp.task('test', function () {
+  gulp
+    .src(paths.test)
+    .pipe(mocha({
+      timeout: 5000
+    }))
 })
