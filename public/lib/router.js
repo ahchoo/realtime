@@ -1,7 +1,7 @@
 var pathToRegexp = require('path-to-regexp')
 
 // list of routes
-var routes = []
+var routes = exports._routes = []
 
 function Route() {
   this.keys = []
@@ -36,9 +36,6 @@ Route.prototype.handle = function (url, params) {
 
   if (this.handler) { this.handler(params) }
 }
-
-// exports routes array, for testing purpose
-var routes = exports._routes = []
 
 exports.use = function (url, handler) {
   var route = new Route()

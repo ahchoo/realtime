@@ -8,5 +8,9 @@
   "camelcase": true,
   "quotmark": "single",
   "node": true,
-  "browser": true
+  "browser": true,
+  "debug": true,
+  "funcscope": true,
+  "newcap": true,
+  "sub": false
 }
