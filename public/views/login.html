@@ -6,7 +6,7 @@
         <input type="text" data-bind="textInput: username" class="form-control" placeholder="User name">
       </div>
       <div class="form-group">
-        <input type="password" data-bind="textInput: password" class="form-control" placeholder="Password">
+        <input type="password" data-bind="textInput: password, event: {keypress: loginByKey}" class="form-control" placeholder="Password">
       </div>
 
       <div class="form-group">

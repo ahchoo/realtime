@@ -26,6 +26,13 @@ module.exports = function (el) {
         window.alert('login succeed')
         cookie.set('ahchoo_token', res.data.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
       })
+    },
+    loginByKey: function (data, event) {
+      if (event.keyCode === 13) {
+        this.login()
+      } else {
+        return true
+      }
     }
   }, el)
 }

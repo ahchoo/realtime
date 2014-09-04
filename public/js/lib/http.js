@@ -1,5 +1,3 @@
-module.exports = http
-
 var Q = require('q')
 var _ = require('underscore')
 var http = require('http')
