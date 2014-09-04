@@ -40,7 +40,6 @@ app.set('views', path.join(__dirname, '/demo-views'))
 app.use('/demo', express.static(path.join(__dirname, '/demo')))
 app.use('/', express.static(path.join(__dirname, '/public')))
 
-// TODO
 app.sessionStore = sessionStore
 
 module.exports = app

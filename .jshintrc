@@ -9,8 +9,8 @@
   "quotmark": "single",
   "node": true,
   "browser": true,
-  "debug": true,
-  "funcscope": true,
+  "debug": false,
+  "funcscope": false,
   "newcap": true,
   "sub": false
 }
