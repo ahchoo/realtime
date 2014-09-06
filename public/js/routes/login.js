@@ -3,7 +3,6 @@ module.exports = function (el) {
   var ko = require('knockout')
   var cookie = require('cookie-cutter')
 
-  var http = require('../lib/http')
   var api = require('../lib/api')
 
   ko.applyBindings({
@@ -18,7 +17,6 @@ module.exports = function (el) {
         password: password
       })
 
-      debugger
       p.then(function (user) {
         cookie.set('ahchoo_token', user.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
       })
