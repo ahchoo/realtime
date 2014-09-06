@@ -1,39 +1,41 @@
-var http = require('./http')
 var pathToUrl = require('path-to-url')
 var _ = require('underscore')
+var q = require('q')
+
+var http = require('./http')
 
 function Endpoint(name, path) {
   this.name = name
   this.path = path
 }
 
-Endpoint.prototype.create = function () {
+Endpoint.prototype.post = function (a1, a2) {
+  var params, body
 
-}
-
-Endpoint.prototype.one = function () {
-}
-
-Endpoint.prototype.list = function () {
-}
-
-Endpoint.prototype.remove = function () {
-}
-
-Endpoint.prototype.update = function () {
-}
-
-Endpoint.prototype._request = function (options) {
-  var method
-
-  if (options.method) {
-    method = options.method
-  } else {
-    method = 'GET'
+  if (a1 && a2) {
+    params = a1
+    body = a2
+  } else if (a1) {
+    body = a1
   }
 
-  var url
+  return this.request({
+    method: 'POST',
+    params: params,
+    body: body,
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
+Endpoint.prototype.request = function (options) {
+  var deferred = q.defer()
+
+  var method = options.method || 'GET'
+  var headers = options.headers
+
+  var url
   if (options.params) {
     url = pathToUrl(this.path, options.params)
   } else {
@@ -47,13 +49,24 @@ Endpoint.prototype._request = function (options) {
     body = ''
   }
 
-  return http({
+  http({
     path: url,
     method: method,
-    body: body
-  }).promise.then(function (res) {
-    return JSON.parse(res)
+    body: body,
+    headers: headers
+  }).then(function resolve(res) {
+    res = JSON.parse(res)
+
+    if (res.error) {
+      deferred.reject(res.error)
+    } else {
+      deferred.resolve(res.data)
+    }
+  }, function reject(err) {
+    deferred.reject(err)
   })
+
+  return deferred.promise
 }
 
 function encodeParams(params) {
@@ -62,13 +75,22 @@ function encodeParams(params) {
   }).join('&')
 
   function encode(val) {
-    return encodeURIComponents(val).replace('%20', '+')
+    return encodeURIComponent(val).replace('%20', '+')
   }
 }
 
 
 // endpoints
 
-exports.user = new Endpoint('user', '/api/users/:userId')
-exports.game = new Endpoint('game', '/api/games/:gameId')
-exports.item = new Endpoint('item', '/api/items/:itemId')
+_.forEach({
+  user: '/api/users/:userId',
+  game: '/api/games/:gameId',
+  item: '/api/items/:itemId'
+}, function (url, name) {
+  exports[name] = new Endpoint(name, url)
+})
+
+var auth = new Endpoint('auth', '/api/auth')
+auth.login = auth.post
+
+exports.auth = auth
