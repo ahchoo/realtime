@@ -11,7 +11,7 @@ describe('Routes test', function () {
 
     before(function (done) {
       require('mockgoose')(require('mongoose'))
-      require('../../fixture')(function () {
+      require('../../fixture')().then(function () {
         require('mongoose').disconnect(function () {
           app = require('../../app')
           request(app)
@@ -41,10 +41,6 @@ describe('Routes test', function () {
           })
           .end(function (err, res) {
             expect(err).to.not.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
             done()
           })
       })
@@ -57,11 +53,7 @@ describe('Routes test', function () {
           .end(function (err, res) {
             expect(err).to.not.be.ok()
             expect(res.body.data).to.be.ok()
-            expect(res.body.data.length).to.be(1)
-            expect(res.body.data[0].item.title).to.be(item.title)
-            expect(res.body.data[0].capacity).to.be(50)
-            expect(res.body.data[0].status).to.be('stub status')
-            expect(res.body.data[0].countdown).to.be(49)
+            expect(res.body.data.length).to.be(2)
 
             gameId = res.body.data[0]._id
 
@@ -78,10 +70,6 @@ describe('Routes test', function () {
           .end(function (err, res) {
             expect(err).to.not.be.ok()
             expect(res.body.data).to.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
             done()
           })
       })
@@ -95,17 +83,13 @@ describe('Routes test', function () {
           .end(function (err, res) {
             expect(err).to.not.be.ok()
             expect(res.body.data).to.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
 
             request(app)
               .get('/api/games')
               .end(function (err, res) {
                 expect(err).to.not.be.ok()
                 expect(res.body.data).to.be.ok()
-                expect(res.body.data.length).to.be(0)
+                expect(res.body.data.length).to.be(1)
                 done()
               })
           })
@@ -114,4 +98,3 @@ describe('Routes test', function () {
 
   })
 })
-

@@ -11,7 +11,7 @@ describe('Routes test', function () {
 
     before(function (done) {
       require('mockgoose')(require('mongoose'))
-      require('../../fixture')(function () {
+      require('../../fixture')().then(function () {
         require('mongoose').disconnect(function () {
           app = require('../../app')
           done()

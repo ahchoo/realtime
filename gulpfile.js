@@ -43,7 +43,7 @@ gulp.task('watch', function () {
 })
 
 gulp.task('initdb', function () {
-  require('./fixture')(function () {
+  require('./fixture')().then(function () {
     require('mongoose').disconnect()
   })
 })
