@@ -4,6 +4,7 @@ module.exports = function (el) {
   var cookie = require('cookie-cutter')
 
   var api = require('../lib/api')
+  var router = require('../lib/router')
 
   ko.applyBindings({
     username: ko.observable(),
@@ -12,13 +13,12 @@ module.exports = function (el) {
       var username = this.username()
       var password = md5(this.password())
 
-      var p = api.auth.login({
+      api.auth.login({
         username: username,
         password: password
-      })
-
-      p.then(function (user) {
+      }).then(function (user) {
         cookie.set('ahchoo_token', user.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
+        router.goto('/games')
       })
     },
     loginByKey: function (data, event) {

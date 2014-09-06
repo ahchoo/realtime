@@ -18,5 +18,5 @@ router
     new Ctrl({
       view: '/views/games.html',
       ctrl: require('./games')
-    })
+    }).activate()
   })

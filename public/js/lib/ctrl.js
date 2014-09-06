@@ -1,3 +1,4 @@
+var ko = require('knockout')
 var http = require('./http')
 
 module.exports = Controller
@@ -12,6 +13,7 @@ Controller.prototype.activate = function () {
 
   http({path: this.view}).then(function (html) {
     var container = document.getElementById('app_container')
+    ko.cleanNode(container)
 
     container.innerHTML = html
     self.ctrl(container)

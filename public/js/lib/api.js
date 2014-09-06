@@ -9,6 +9,13 @@ function Endpoint(name, path) {
   this.path = path
 }
 
+Endpoint.prototype.get = function (params) {
+  return this.request({
+    method: 'GET',
+    params: params
+  })
+}
+
 Endpoint.prototype.post = function (a1, a2) {
   var params, body
 
@@ -31,6 +38,9 @@ Endpoint.prototype.post = function (a1, a2) {
 
 Endpoint.prototype.request = function (options) {
   var deferred = q.defer()
+
+  options.params = options.params || {}
+  options.body = options.body || {}
 
   var method = options.method || 'GET'
   var headers = options.headers
@@ -83,11 +93,15 @@ function encodeParams(params) {
 // endpoints
 
 _.forEach({
-  user: '/api/users/:userId',
-  game: '/api/games/:gameId',
-  item: '/api/items/:itemId'
+  user: '/api/users/:userId?',
+  game: '/api/games/:gameId?',
+  item: '/api/items/:itemId?'
 }, function (url, name) {
-  exports[name] = new Endpoint(name, url)
+  var resource = new Endpoint(name, url)
+
+  resource.list = resource.get
+
+  exports[name] = resource
 })
 
 var auth = new Endpoint('auth', '/api/auth')
