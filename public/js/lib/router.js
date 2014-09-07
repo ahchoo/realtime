@@ -1,15 +1,16 @@
 var pathToRegexp = require('path-to-regexp')
+var EventEmitter = require('events').EventEmitter
 
-// Route class
+// Layer class
 
-function Route() {
+function Layer() {
   this.keys = []
   this.regexp = /.*/
   this.url = '/'
   this.handler = null
 }
 
-Route.prototype.match = function (url) {
+Layer.prototype.match = function (url) {
   var m = this.regexp.exec(url)
 
   if (m) {
@@ -28,33 +29,27 @@ Route.prototype.match = function (url) {
   return null
 }
 
-Route.prototype.handle = function (url, params) {
-  if (url !== window.location.pathname) {
-    history.pushState(params, '', url)
-  }
-
+Layer.prototype.handle = function (url, params) {
   if (this.handler) { this.handler(params) }
 }
 
 
-
 // router
-
-var router = exports
+var router = new EventEmitter()
 
 // list of routes
-router._routes = []
+router._layers = []
 router.params = {}
 
 router.use = function (url, handler) {
-  var route = new Route()
-  var regexp = pathToRegexp(url, route.keys)
+  var layer = new Layer()
+  var regexp = pathToRegexp(url, layer.keys)
 
-  route.regexp = regexp
-  route.handler = handler
-  route.url = url
+  layer.regexp = regexp
+  layer.handler = handler
+  layer.url = url
 
-  router._routes.push(route)
+  router._layers.push(layer)
 
   return this
 }
@@ -62,13 +57,27 @@ router.use = function (url, handler) {
 router.goto = function (url) {
   var i
 
-  for (i = 0; i < router._routes.length; i++) {
-    var route = router._routes[i]
-    var params = route.match(url)
+  for (i = 0; i < router._layers.length; i++) {
+    var layer = router._layers[i]
+    var params = layer.match(url)
 
     if (params) {
       router.params = params
-      route.handle(url, params)
+      router.url = url
+
+      var prevented = false
+
+      router.emit('before change', url, params, function () {
+        prevented = true
+      })
+
+      if (prevented) { return }
+
+      history.pushState(params, '', url)
+
+      router.emit('after change', url, params)
+
+      layer.handle(url, params)
 
       return
     }
@@ -97,6 +106,9 @@ window.addEventListener('popstate', function () {
   router.reload()
 })
 
-window.onload = function () {
+window.addEventListener('load', function () {
   router.reload()
-}
+})
+
+
+module.exports = router

@@ -12,5 +12,6 @@
   "debug": false,
   "funcscope": false,
   "newcap": true,
-  "sub": false
+  "sub": false,
+  "loopfunc": true
 }
