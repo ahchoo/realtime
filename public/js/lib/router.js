@@ -1,7 +1,9 @@
 var pathToRegexp = require('path-to-regexp')
 
+var router = exports
+
 // list of routes
-var routes = exports._routes = []
+router._routes = []
 
 function Route() {
   this.keys = []
@@ -37,7 +39,7 @@ Route.prototype.handle = function (url, params) {
   if (this.handler) { this.handler(params) }
 }
 
-exports.use = function (url, handler) {
+router.use = function (url, handler) {
   var route = new Route()
   var regexp = pathToRegexp(url, route.keys)
 
@@ -45,16 +47,16 @@ exports.use = function (url, handler) {
   route.handler = handler
   route.url = url
 
-  routes.push(route)
+  router._routes.push(route)
 
   return this
 }
 
-exports.goto = function (url) {
+router.goto = function (url) {
   var i
 
-  for (i = 0; i < routes.length; i++) {
-    var route = routes[i]
+  for (i = 0; i < router._routes.length; i++) {
+    var route = router._routes[i]
     var params = route.match(url)
 
     if (params) {
@@ -67,27 +69,27 @@ exports.goto = function (url) {
   console.log('No match found')
 }
 
-exports.forward = function () {
+router.forward = function () {
   history.forward()
 }
 
-exports.back = function () {
+router.back = function () {
   history.back()
 }
 
-exports.go = function (index) {
+router.go = function (index) {
   history.go(index)
 }
 
-exports.reload = function () {
-  exports.goto(window.location.pathname)
+router.reload = function () {
+  router.goto(window.location.pathname)
 }
 
 
-// window.addEventListener('onpopstate', function () {
-  // console.log('pop state')
-// })
+window.addEventListener('popstate', function () {
+  router.reload()
+})
 
 window.onload = function () {
-  exports.goto(window.location.pathname)
+  router.reload()
 }
