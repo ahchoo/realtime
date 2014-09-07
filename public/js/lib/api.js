@@ -16,25 +16,30 @@ Endpoint.prototype.get = function (params) {
   })
 }
 
-Endpoint.prototype.post = function (a1, a2) {
-  var params, body
+_.forEach(['post', 'update', 'patch', 'delete'], function (method) {
 
-  if (a1 && a2) {
-    params = a1
-    body = a2
-  } else if (a1) {
-    body = a1
+  Endpoint.prototype[method] = function (a1, a2) {
+    var params, body
+
+    if (a1 && a2) {
+      params = a1
+      body = a2
+    } else if (a1) {
+      body = a1
+    }
+
+    return this.request({
+      method: method.toUpperCase(),
+      params: params,
+      body: body,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    })
   }
 
-  return this.request({
-    method: 'POST',
-    params: params,
-    body: body,
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded'
-    }
-  })
-}
+})
+
 
 Endpoint.prototype.request = function (options) {
   var deferred = q.defer()
@@ -99,7 +104,10 @@ _.forEach({
 }, function (url, name) {
   var resource = new Endpoint(name, url)
 
+  // alias
   resource.list = resource.get
+  resource.one = resource.get
+  resource.remove = resource.delete
 
   exports[name] = resource
 })
