@@ -20,3 +20,9 @@ router
       ctrl: require('./games')
     }).activate()
   })
+  .use('/games/:gameId', function () {
+    new Ctrl({
+      view: '/views/game.html',
+      ctrl: require('./game')
+    }).activate()
+  })

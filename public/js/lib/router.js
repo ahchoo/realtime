@@ -1,9 +1,6 @@
 var pathToRegexp = require('path-to-regexp')
 
-var router = exports
-
-// list of routes
-router._routes = []
+// Route class
 
 function Route() {
   this.keys = []
@@ -39,6 +36,16 @@ Route.prototype.handle = function (url, params) {
   if (this.handler) { this.handler(params) }
 }
 
+
+
+// router
+
+var router = exports
+
+// list of routes
+router._routes = []
+router.params = {}
+
 router.use = function (url, handler) {
   var route = new Route()
   var regexp = pathToRegexp(url, route.keys)
@@ -60,6 +67,7 @@ router.goto = function (url) {
     var params = route.match(url)
 
     if (params) {
+      router.params = params
       route.handle(url, params)
 
       return
@@ -84,7 +92,6 @@ router.go = function (index) {
 router.reload = function () {
   router.goto(window.location.pathname)
 }
-
 
 window.addEventListener('popstate', function () {
   router.reload()
