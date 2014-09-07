@@ -11,6 +11,7 @@ var paths = {
   },
   server: {
     scripts: [
+      'app.js',
       'server.js',
       'lib/**/*.js',
       'config/**/*.js',

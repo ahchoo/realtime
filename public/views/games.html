@@ -1,0 +1,13 @@
+<h2>Game List</h2>
+
+<div class="row" style="margin-top: 25px">
+  <div class="col-sm-6 col-md-4" data-bind="foreach: games">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3 data-bind="text: item.title"></h3>
+        <p data-bind="text: item.description"></p>
+        <p><a href="#" class="btn btn-primary btn-block" role="button">Enter</a></p>
+      </div>
+    </div>
+  </div>
+</div>
