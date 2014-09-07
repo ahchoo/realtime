@@ -6,7 +6,7 @@
       <div class="caption">
         <h3 data-bind="text: item.title"></h3>
         <p data-bind="text: item.description"></p>
-        <p><a href="#" class="btn btn-primary btn-block" role="button">Enter</a></p>
+        <p><a data-bind="attr: {href: '/games/' + _id}" class="btn btn-primary btn-block" role="button">Enter</a></p>
       </div>
     </div>
   </div>

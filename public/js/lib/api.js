@@ -98,9 +98,9 @@ function encodeParams(params) {
 // endpoints
 
 _.forEach({
-  user: '/api/users/:userId?',
-  game: '/api/games/:gameId?',
-  item: '/api/items/:itemId?'
+  user: '/api/users/:id?',
+  game: '/api/games/:id?',
+  item: '/api/items/:id?'
 }, function (url, name) {
   var resource = new Endpoint(name, url)
 
