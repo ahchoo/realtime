@@ -7,11 +7,11 @@ describe('Routes test', function () {
   describe('Items', function () {
     var app
     var itemId
-    
+
     before(function (done) {
       app = require('../../app')
       require('mockgoose')(require('mongoose'))
-      require('../../fixture')(function () {
+      require('../../fixture')().then(function () {
         require('mongoose').disconnect(function () {
           done()
         })
