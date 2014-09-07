@@ -1,11 +1,13 @@
+var cookie = require('cookie-cutter')
+
 var router = require('../lib/router')
 var Ctrl = require('../lib/ctrl')
 
 router
   .use('/', function () {
     new Ctrl({
-      view: '/views/login.html',
-      ctrl: require('./login')
+      view: '/views/games.html',
+      ctrl: require('./games')
     }).activate()
   })
   .use('/login', function () {
@@ -26,3 +28,11 @@ router
       ctrl: require('./game')
     }).activate()
   })
+
+router.on('before change', function (url, params, prevent) {
+  if (url !== '/login' && !cookie.get('ahchoo_token')) {
+    router.goto('/login')
+
+    prevent()
+  }
+})
