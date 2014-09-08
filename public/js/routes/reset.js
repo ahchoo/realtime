@@ -5,7 +5,7 @@ module.exports = function (el) {
   ko.applyBindings({
     reset: function () {
       api.db.reset().then(function () {
-        alert('reset succeed')
+        window.alert('reset succeed')
       })
     }
   }, el)
