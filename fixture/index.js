@@ -10,18 +10,13 @@ module.exports = function () {
 
   var models = require('../lib/models')
 
-  console.log('Drop previous database')
+  // fixtures
+  return initCollection('User', [
+    {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
+    {email: 'hah@ahchoo.com', name: 'Ironman', password: md5('shit')}
+  ]).then(function () {
 
-  return dropDb().then(function () {
-    console.log('succeed')
-
-    // fixtures
-    return initCollection('User', [
-      {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-      {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
-      {email: 'hah@ahchoo.com', name: 'Ironman', password: md5('shit')}
-    ])
-  }).then(function () {
     return initCollection('Item', [
       {
         title: 'Tesla Model S',
@@ -67,38 +62,22 @@ module.exports = function () {
   function initCollection(name, collection) {
     var deferred = q.defer()
 
-    var promises = _.map(collection, function (document) {
-      if (_.isFunction(document)) {
-        return document()
-      } else {
-        return models[name].create(document)
-      }
-    })
-
-    q.all(promises).then(function () {
-      deferred.resolve()
-    }, function (err) {
-      deferred.reject('Unable to init collection: ' + name + ', reason: ' + err.message)
-    })
-
-    return deferred.promise
-  }
-
-  function dropDb() {
-    var deferred = q.defer()
-
-    // if in test
-    if (describe) {
-      deferred.resolve()
-    } else {
-      mongoose.connection.db.dropDatabase(function (err) {
-        if (err) {
-          deferred.reject()
+    models[name].remove({}, function () {
+      var promises = _.map(collection, function (document) {
+        if (_.isFunction(document)) {
+          return document()
         } else {
-          deferred.resolve()
+          return models[name].create(document)
         }
       })
-    }
+
+
+      q.all(promises).then(function () {
+        deferred.resolve()
+      }, function (err) {
+        deferred.reject('Unable to init collection: ' + name + ', reason: ' + err.message)
+      })
+    })
 
     return deferred.promise
   }
