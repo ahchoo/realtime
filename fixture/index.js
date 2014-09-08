@@ -86,13 +86,19 @@ module.exports = function () {
 
   function dropDb() {
     var deferred = q.defer()
-    mongoose.connection.db.dropDatabase(function (err) {
-      if (err) {
-        deferred.reject()
-      } else {
-        deferred.resolve()
-      }
-    })
+
+    // if in test
+    if (describe) {
+      deferred.resolve()
+    } else {
+      mongoose.connection.db.dropDatabase(function (err) {
+        if (err) {
+          deferred.reject()
+        } else {
+          deferred.resolve()
+        }
+      })
+    }
 
     return deferred.promise
   }

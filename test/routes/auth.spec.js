@@ -2,12 +2,13 @@
 
 var expect = require('expect.js')
 var request = require('supertest')
+var md5 = require('MD5')
 
 describe('Routes test', function () {
   describe('Auth', function () {
     var app
-    var username = 'fu'
-    var password = '202cb962ac59075b964b07152d234b70'
+    var email = 'test@ahchoo.com'
+    var password = md5('husky')
 
     before(function (done) {
       require('mockgoose')(require('mongoose'))
@@ -29,13 +30,13 @@ describe('Routes test', function () {
           .post('/api/auth')
           .type('form')
           .send({
-            username: username,
+            email: email,
             password: password
           })
           .end(function (err, res) {
             expect(err).to.not.be.ok()
             expect(res.body.data).to.be.ok()
-            expect(res.body.data.username).to.be(username)
+            expect(res.body.data.email).to.be(email)
             expect(res.body.data.token).to.be.ok()
             done()
           })
@@ -46,7 +47,7 @@ describe('Routes test', function () {
           .post('/api/auth')
           .type('form')
           .send({
-            username: username,
+            email: email,
             password: 'stub password'
           })
           .end(function (err, res) {
@@ -62,7 +63,7 @@ describe('Routes test', function () {
           .post('/api/auth')
           .type('form')
           .send({
-            username: 'stub username',
+            email: 'stub username',
             password: 'stub password'
           })
           .end(function (err, res) {
