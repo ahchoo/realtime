@@ -11,6 +11,7 @@ var paths = {
   },
   server: {
     scripts: [
+      'app.js',
       'server.js',
       'lib/**/*.js',
       'config/**/*.js',
@@ -43,7 +44,7 @@ gulp.task('watch', function () {
 })
 
 gulp.task('initdb', function () {
-  require('./fixture')(function () {
+  require('./fixture')().then(function () {
     require('mongoose').disconnect()
   })
 })
