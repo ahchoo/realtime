@@ -3,18 +3,25 @@ module.exports = function () {
   var _ = require('underscore')
   var md5 = require('MD5')
   var q = require('q')
+  var mongoose = require('mongoose')
 
   // init connection
   require('../lib/connect-db')()
 
   var models = require('../lib/models')
 
-  // fixtures
-  return initCollection('User', [
-    {username: 'fu', password: md5('123')},
-    {username: 'admin', password: md5('husky')}
+  console.log('Drop previous database')
 
-  ]).then(function () {
+  return dropDb().then(function () {
+    console.log('succeed')
+
+    // fixtures
+    return initCollection('User', [
+      {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+      {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
+      {email: 'hah@ahchoo.com', name: 'Ironman', password: md5('shit')}
+    ])
+  }).then(function () {
     return initCollection('Item', [
       {
         title: 'Tesla Model S',
@@ -28,8 +35,8 @@ module.exports = function () {
         price: 850
       }
     ])
-
   }).then(function () {
+
     return initCollection('Game', [function () {
       var deferred = q.defer()
 
@@ -60,32 +67,34 @@ module.exports = function () {
   function initCollection(name, collection) {
     var deferred = q.defer()
 
-    // clear collection first
-    var p = models[name].remove().exec()
+    var promises = _.map(collection, function (document) {
+      if (_.isFunction(document)) {
+        return document()
+      } else {
+        return models[name].create(document)
+      }
+    })
 
-    p.then(function resolve() {
-      var promises = _.map(collection, function (document) {
-        if (_.isFunction(document)) {
-          return document()
-        } else {
-          return initDocument(name, document)
-        }
-      })
-
-      q.all(promises).then(function () {
-        deferred.resolve()
-      }, function (err) {
-        deferred.reject('Unable to init collection: ' + name + ', reason: ' + err.message)
-      })
-    }, function reject(err) {
-      deferred.reject('Unable to clear collection: ' + name + ', reason: ' + err.message)
+    q.all(promises).then(function () {
+      deferred.resolve()
+    }, function (err) {
+      deferred.reject('Unable to init collection: ' + name + ', reason: ' + err.message)
     })
 
     return deferred.promise
+  }
 
-    function initDocument(name, document) {
-      return models[name].create(document)
-    }
+  function dropDb() {
+    var deferred = q.defer()
+    mongoose.connection.db.dropDatabase(function (err) {
+      if (err) {
+        deferred.reject()
+      } else {
+        deferred.resolve()
+      }
+    })
+
+    return deferred.promise
   }
 
 }
