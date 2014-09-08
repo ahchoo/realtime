@@ -7,14 +7,14 @@ module.exports = function (el) {
   var router = require('../lib/router')
 
   ko.applyBindings({
-    username: ko.observable(),
+    email: ko.observable(),
     password: ko.observable(),
     login: function () {
-      var username = this.username()
+      var email = this.email()
       var password = md5(this.password())
 
       api.auth.login({
-        username: username,
+        email: email,
         password: password
       }).then(function (user) {
         cookie.set('ahchoo_token', user.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
