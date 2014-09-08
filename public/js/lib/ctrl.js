@@ -1,4 +1,6 @@
 var ko = require('knockout')
+var document = require('global/document')
+
 var http = require('./http')
 
 module.exports = Controller

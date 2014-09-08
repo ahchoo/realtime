@@ -1,6 +1,9 @@
 var pathToRegexp = require('path-to-regexp')
 var EventEmitter = require('events').EventEmitter
 
+var window = require('global/window')
+var history = window.history
+
 // Layer class
 
 function Layer() {

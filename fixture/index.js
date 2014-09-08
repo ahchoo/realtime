@@ -3,7 +3,6 @@ module.exports = function () {
   var _ = require('underscore')
   var md5 = require('MD5')
   var q = require('q')
-  var mongoose = require('mongoose')
 
   // init connection
   require('../lib/connect-db')()
