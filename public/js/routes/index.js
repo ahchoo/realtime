@@ -28,6 +28,12 @@ router
       ctrl: require('./game')
     }).activate()
   })
+  .use('/reset', function () {
+    new Ctrl({
+      view: '/views/reset.html',
+      ctrl: require('./reset')
+    }).activate()
+  })
 
 router.on('before change', function (url, params, prevent) {
   if (url !== '/login' && !cookie.get('ahchoo_token')) {

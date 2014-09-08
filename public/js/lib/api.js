@@ -112,7 +112,11 @@ _.forEach({
   exports[name] = resource
 })
 
-var auth = new Endpoint('auth', '/api/auth')
+var auth = exports.auth = new Endpoint('auth', '/api/auth')
 auth.login = auth.post
 
-exports.auth = auth
+var db = exports.db = new Endpoint('db', '/api/db/:action')
+
+db.reset = function () {
+  return this.post({action: 'reset'}, {})
+}
