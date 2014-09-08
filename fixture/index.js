@@ -12,8 +12,7 @@ module.exports = function () {
   // fixtures
   return initCollection('User', [
     {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
-    {email: 'hah@ahchoo.com', name: 'Ironman', password: md5('shit')}
+    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
 
     return initCollection('Item', [
@@ -69,7 +68,6 @@ module.exports = function () {
           return models[name].create(document)
         }
       })
-
 
       q.all(promises).then(function () {
         deferred.resolve()
