@@ -108,14 +108,13 @@ _.forEach({
   resource.list = resource.get
   resource.one = resource.get
   resource.remove = resource.delete
+  resource.create = resource.post
 
   exports[name] = resource
 })
 
 var auth = exports.auth = new Endpoint('auth', '/api/auth')
 auth.login = auth.post
-// TODO May I use put?
-auth.register = auth.put
 
 var db = exports.db = new Endpoint('db', '/api/db/:action')
 
