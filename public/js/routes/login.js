@@ -27,6 +27,9 @@ module.exports = function (el) {
       } else {
         return true
       }
+    },
+    signUp: function () {
+      router.goto('/sign-up')
     }
   }, el)
 }

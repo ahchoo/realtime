@@ -16,7 +16,7 @@ Endpoint.prototype.get = function (params) {
   })
 }
 
-_.forEach(['post', 'update', 'patch', 'delete'], function (method) {
+_.forEach(['post', 'update', 'patch', 'delete', 'put'], function (method) {
 
   Endpoint.prototype[method] = function (a1, a2) {
     var params, body
@@ -114,6 +114,8 @@ _.forEach({
 
 var auth = exports.auth = new Endpoint('auth', '/api/auth')
 auth.login = auth.post
+// TODO May I use put?
+auth.register = auth.put
 
 var db = exports.db = new Endpoint('db', '/api/db/:action')
 
