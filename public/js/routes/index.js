@@ -34,9 +34,15 @@ router
       ctrl: require('./reset')
     }).activate()
   })
+  .use('/signup', function () {
+    new Ctrl({
+      view: '/views/signup.html',
+      ctrl: require('./signup')
+    }).activate()
+  })
 
 router.on('before change', function (url, params, prevent) {
-  if (url !== '/login' && !cookie.get('ahchoo_token')) {
+  if (url !== '/login' && url !== '/signup' && !cookie.get('ahchoo_token')) {
     router.goto('/login')
 
     prevent()

@@ -16,7 +16,7 @@ Endpoint.prototype.get = function (params) {
   })
 }
 
-_.forEach(['post', 'update', 'patch', 'delete'], function (method) {
+_.forEach(['post', 'update', 'patch', 'delete', 'put'], function (method) {
 
   Endpoint.prototype[method] = function (a1, a2) {
     var params, body
@@ -108,6 +108,7 @@ _.forEach({
   resource.list = resource.get
   resource.one = resource.get
   resource.remove = resource.delete
+  resource.create = resource.post
 
   exports[name] = resource
 })
