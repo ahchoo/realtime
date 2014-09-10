@@ -15,8 +15,6 @@ module.exports = function (el) {
       var email = this.email() || ''
       var name = this.name() || ''
       var password = md5(this.password()) || ''
-      // var password2 = md5(this.password2()) || ''
-
       api.user.create({
         email: email,
         name: name,
