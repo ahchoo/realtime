@@ -108,6 +108,7 @@ _.forEach({
   resource.list = resource.get
   resource.one = resource.get
   resource.remove = resource.delete
+  resource.create = resource.post
 
   exports[name] = resource
 })
