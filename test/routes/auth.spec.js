@@ -76,30 +76,5 @@ describe('Routes test', function () {
 
     })
 
-    describe('PUT /api/auth', function () {
-      it('expect create a user', function (done) {
-        var email = 'stub_test@test.com'
-        var name = 'stub name'
-        var password = md5('stub password')
-        var password2 = password
-
-        request(app)
-          .put('/api/auth')
-          .type('form')
-          .send({
-            email: email,
-            name: name,
-            password: password,
-            password2: password2
-          })
-          .end(function (err, res) {
-            expect(err).to.not.be.ok()
-            expect(res.body.data).to.be.ok()
-            expect(res.body.data.email).to.be(email)
-            expect(res.body.data.token).to.be.ok()
-            done()
-          })
-      })
-    })
   })
 })

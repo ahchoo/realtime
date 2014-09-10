@@ -15,13 +15,11 @@ module.exports = function (el) {
       var email = this.email() || ''
       var name = this.name() || ''
       var password = md5(this.password()) || ''
-      var password2 = md5(this.password2()) || ''
 
-      api.auth.register({
+      api.user.post({
         email: email,
         name: name,
-        password: password,
-        password2: password2
+        password: password
       }).then(function (user) {
         cookie.set('ahchoo_token', user.token, {
           expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
