@@ -4,15 +4,25 @@ module.exports = function (el) {
   var io = require('socket.io-client')
   var cookie = require('cookie-cutter')
   var _ = require('underscore')
+  var window = require('global/window')
 
   var api = require('../lib/api')
   var router = require('../lib/router')
 
   var users = ko.observableArray()
 
-  var socket = io.connect('127.0.0.1', {
-    query: 'token=' + cookie.get('ahchoo_token') + '&gameId=' + router.params.gameId
-  })
+  var socket
+  var query = 'token=' + cookie.get('ahchoo_token') + '&gameId=' + router.params.gameId
+
+  var currentUri = window.location.href
+
+  // need different config for local and production env
+  if (currentUri.indexOf('127.0.0.1') !== -1 ||
+      currentUri.indexOf('localhost') !== -1) {
+    socket = io.connect('127.0.0.1', {query: query})
+  } else {
+    socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000', {query: query})
+  }
 
   socket.on('player-joined', addUser)
   socket.on('players-joined', addUserCollection)
