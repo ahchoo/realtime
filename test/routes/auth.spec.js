@@ -3,33 +3,26 @@
 var expect = require('expect.js')
 var request = require('supertest')
 var mockgoose = require('mockgoose')
-var mongoose = require('mongoose')
+var models = require('../../lib/models')
 var md5 = require('MD5')
 
 describe('auth api', function () {
-
   var app
 
-  before(function (done) {
-    mockgoose(mongoose)
+  beforeEach(function (done) {
+    app = require('../../app')
 
-    require('../../lib/connect-db')().then(function () {
-      app = require('../../app')
-
-      var models = require('../../lib/models')
-      models.User.create({
-        email: 'test@ahchoo.com',
-        password: md5('123'),
-        name: 'Ahchoo Tech',
-        token: 'abc'
-      }, function (err, user) {
-        done()
-      })
+    models.User.create({
+      email: 'test@ahchoo.com',
+      password: md5('123'),
+      name: 'Ahchoo Tech',
+      token: 'abc'
+    }, function (err, user) {
+      done()
     })
-
   })
 
-  after(function () {
+  afterEach(function () {
     mockgoose.reset()
   })
 
