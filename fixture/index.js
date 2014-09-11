@@ -3,6 +3,7 @@ module.exports = function () {
   var _ = require('underscore')
   var md5 = require('MD5')
   var q = require('q')
+  var ObjectId = require('mongoose').Types.ObjectId
 
   // init connection
   require('../lib/connect-db')()
@@ -15,41 +16,38 @@ module.exports = function () {
     {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
 
+    var ids = {
+      tesla: ObjectId(),
+      iphone: ObjectId()
+    }
+
     return initCollection('Item', [
       {
+        id: ids.tesla,
         title: 'Tesla Model S',
         countdown: 100,
         status: 'initialize',
         price: 75000
       }, {
+        id: ids.iphone,
         title: 'iPhone 6',
         countdown: 100,
         status: 'initialize',
         price: 850
       }
-    ])
-  }).then(function () {
-
-    return initCollection('Game', [function () {
-      var deferred = q.defer()
-
-      models.Item.findOne({title: 'iPhone 6'}, function (err, item) {
-        if (err) { return deferred.reject() }
-
-        models.Game.create({
-          item: item.id,
-          capacity: 100,
-          countdown: 10
-        }).then(function () {
-          deferred.resolve()
-        }, function (err) {
-          deferred.reject(err.message)
-        })
-      })
-
-      return deferred.promise
+    ]).then(function () {
+      return ids
+    })
+  }).then(function (ids) {
+    return initCollection('Game', [{
+      item: ids.iphone,
+      capacity: 100,
+      countdown: 10
+    }, {
+      item: ids.tesla,
+      capactity: 50,
+      countdown: 15
     }])
-
   }).then(function () {
     console.log('Initialize database succeed')
   }).fail(function (reason) {
