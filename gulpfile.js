@@ -50,9 +50,13 @@ gulp.task('initdb', function () {
 })
 
 gulp.task('test', function () {
-  gulp
-    .src(paths.test)
-    .pipe(mocha({
-      timeout: 5000
-    }))
+  require('mockgoose')(require('mongoose'))
+
+  require('./lib/connect-db')().then(function () {
+    gulp
+      .src(paths.test)
+      .pipe(mocha({
+        timeout: 5000
+      }))
+  })
 })
