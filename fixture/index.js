@@ -3,7 +3,7 @@ module.exports = function () {
   var _ = require('underscore')
   var md5 = require('MD5')
   var q = require('q')
-  var ObjectId = require('mongoose').Types.ObjectId
+  var objectId = require('mongoose').Types.ObjectId
 
   // init connection
   require('../lib/connect-db')()
@@ -17,8 +17,8 @@ module.exports = function () {
   ]).then(function () {
 
     var ids = {
-      tesla: ObjectId(),
-      iphone: ObjectId()
+      tesla: objectId(),
+      iphone: objectId()
     }
 
     return initCollection('Item', [
