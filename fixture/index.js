@@ -10,24 +10,54 @@ module.exports = function () {
 
   var models = require('../lib/models')
 
+  var userIds = {
+    fu: objectId(),
+    test: objectId()
+  }
+
+  var roleIds = {
+    admin: objectId(),
+    normal: objectId(),
+    guest: objectId()
+  }
+
+  var privilegeIds = {
+    postApiAuth: objectId(),
+    postApiUser: objectId()
+  }
+
   // fixtures
   return initCollection('User', [
-    {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+    {id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+    {id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
     // roles
     return initCollection('Role', [{
+      id: roleIds.admin,
       name: 'Admin',
       description: 'Administrators'
     }, {
+      id: roleIds.normal,
       name: 'Normal',
       description: 'Normal Users'
     }, {
+      id: roleIds.guest,
       name: 'Guest',
       description: 'Guest'
     }])
   }).then(function () {
     // privileges
+    return initCollection('Privilege', [{
+      id: privilegeIds.postApiAuth,
+      name: 'user login',
+      method: 'post',
+      path: '/auth'
+    }, {
+      id: privilegeIds.postApiUser,
+      name: 'create user',
+      method: 'post',
+      path: '/users'
+    }])
   }).then(function () {
     // user in role
   }).then(function () {
@@ -78,7 +108,6 @@ module.exports = function () {
 
     models[name].remove({}, function () {
       var promises = _.map(collection, function (document) {
-        console.log(document)
         if (_.isFunction(document)) {
           return document()
         } else {
