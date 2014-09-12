@@ -11,6 +11,7 @@ var paths = {
   },
   server: {
     scripts: [
+      'app.js',
       'server.js',
       'lib/**/*.js',
       'config/**/*.js',
@@ -43,12 +44,16 @@ gulp.task('watch', function () {
 })
 
 gulp.task('initdb', function () {
-  require('./fixture')(function () {
+  require('./fixture')().then(function () {
     require('mongoose').disconnect()
   })
 })
 
 gulp.task('test', function () {
+  process.env.NODE_ENV = 'testing'
+
+  require('mockgoose')(require('mongoose'))
+
   gulp
     .src(paths.test)
     .pipe(mocha({

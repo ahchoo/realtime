@@ -1,117 +1,150 @@
-/* global describe, before, after, it */
+/* global describe, beforeEach, afterEach, it */
 
 var expect = require('expect.js')
+var should = require('should')
 var request = require('supertest')
+var mockgoose = require('mockgoose')
+var ObjectId = require('mongoose').Types.ObjectId
+var models = require('../../lib/models')
+var _ = require('underscore')
 
-describe('Routes test', function () {
-  describe('Game', function () {
-    var app
-    var item
-    var gameId
+describe('game api', function () {
+  var app
+  var ids = {}
+  var item
 
-    before(function (done) {
-      require('mockgoose')(require('mongoose'))
-      require('../../fixture')(function () {
-        require('mongoose').disconnect(function () {
-          app = require('../../app')
-          request(app)
-            .get('/api/items')
-            .end(function (err, res) {
-              item = res.body.data[0]
-              done()
-            })
+  beforeEach(function (done) {
+    app = require('../../app')
+
+    ids.item = ObjectId()
+    ids.game = ObjectId()
+
+    models.Item.create({
+      _id: ids.item,
+      title: 'iPhone 10',
+      description: 'am i see this version',
+      price: 10000
+    }).then(function () {
+      return models.Item.find().exec()
+    }).then(function (items) {
+      item = items[0]
+
+      return models.Game.create({
+        _id: ids.game,
+        item: String(item._id),
+        capacity: 1,
+        status: 'sss',
+        countdown: 2
+      })
+    }).then(function () {
+      done()
+    })
+  })
+
+  afterEach(function () {
+    mockgoose.reset()
+  })
+
+  it('should create a game', function (done) {
+    request(app)
+      .post('/api/games')
+      .type('form')
+      .send({
+        item: String(item._id),
+        capacity: 1000,
+        status: 'stub status',
+        countdown: 999
+      })
+      .end(function (err, res) {
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1000,
+            status: 'stub status',
+            countdown: 999,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
+        })
+
+        models.Game.find().exec().then(function(games) {
+          games.should.have.length(2)
+          done()
         })
       })
-    })
+  })
 
-    after(function () {
-      require('mongoose').disconnect()
-    })
+  it('should get all games info', function (done) {
+    request(app)
+      .get('/api/games')
+      .end(function (err, res) {
+        res.body.data.should.have.length(1)
 
-    describe('POST /api/games', function () {
-      it('expect create a game info', function (done) {
-        request(app)
-          .post('/api/games')
-          .type('form')
-          .send({
-            item: item._id,
-            capacity: 50,
-            status: 'stub status',
-            countdown: 49
-          })
-          .end(function (err, res) {
-            expect(err).to.not.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
-            done()
-          })
+        res.body.should.match({
+          data: [{
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }]
+        })
+
+        done()
       })
-    })
+  })
 
-    describe('GET /api/games', function () {
-      it('expect get all games info', function (done) {
-        request(app)
-          .get('/api/games')
-          .end(function (err, res) {
-            expect(err).to.not.be.ok()
-            expect(res.body.data).to.be.ok()
-            expect(res.body.data.length).to.be(1)
-            expect(res.body.data[0].item.title).to.be(item.title)
-            expect(res.body.data[0].capacity).to.be(50)
-            expect(res.body.data[0].status).to.be('stub status')
-            expect(res.body.data[0].countdown).to.be(49)
+  it('should get a game info with id', function (done) {
+    request(app)
+      .get('/api/games/' + ids.game.toString())
+      .end(function (err, res) {
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
+        })
 
-            gameId = res.body.data[0]._id
-
-            done()
-          })
+        done()
       })
-    })
+  })
 
-    describe('GET /api/games/:gameId', function () {
-      it('expect get a specific game info', function (done) {
-        expect(gameId).to.be.ok()
-        request(app)
-          .get('/api/games/' + gameId)
-          .end(function (err, res) {
-            expect(err).to.not.be.ok()
-            expect(res.body.data).to.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
-            done()
-          })
+  it('should remove a game', function (done) {
+    request(app)
+      .delete('/api/games/' + ids.game.toString())
+      .end(function (err, res) {
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
+        })
+
+        models.Game.find().exec().then(function (games) {
+          games.should.have.length(0)
+          done()
+        })
       })
-    })
-
-    describe('DELETE /api/games/:gameId', function () {
-      it('expect remove a specific game', function (done) {
-        expect(gameId).to.be.ok()
-        request(app)
-          .delete('/api/games/' + gameId)
-          .end(function (err, res) {
-            expect(err).to.not.be.ok()
-            expect(res.body.data).to.be.ok()
-            expect(res.body.data.item.title).to.be(item.title)
-            expect(res.body.data.capacity).to.be(50)
-            expect(res.body.data.status).to.be('stub status')
-            expect(res.body.data.countdown).to.be(49)
-
-            request(app)
-              .get('/api/games')
-              .end(function (err, res) {
-                expect(err).to.not.be.ok()
-                expect(res.body.data).to.be.ok()
-                expect(res.body.data.length).to.be(0)
-                done()
-              })
-          })
-      })
-    })
-
   })
 })
-

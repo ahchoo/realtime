@@ -1,29 +1,11 @@
 var env = process.env
 
-var config
+var connStr
 
 if (env.OPENSHIFT_APP_NAME) {
-
-  config = {
-    database: env.OPENSHIFT_APP_NAME,
-    username: env.OPENSHIFT_MONGODB_DB_USERNAME,
-    password: env.OPENSHIFT_MONGODB_DB_PASSWORD,
-    host: env.OPENSHIFT_MONGODB_DB_HOST,
-    port: env.OPENSHIFT_MONGODB_DB_PORT,
-    authdb: env.OPENSHIFT_APP_NAME
-  }
-
+  connStr = env.OPENSHIFT_MONGODB_DB_URL + env.OPENSHIFT_APP_NAME
 } else {
-
-  config = {
-    database: 'realtime',
-    username: 'admin',
-    password: '1234',
-    host: '127.0.0.1',
-    port: 27017,
-    authdb: 'admin'
-  }
-
+  connStr = 'mongodb://admin:1234@127.0.0.1:27017/realtime'
 }
 
-module.exports = config
+module.exports = connStr

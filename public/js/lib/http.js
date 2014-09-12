@@ -1,6 +1,4 @@
-module.exports = http
-
-var Q = require('q')
+var q = require('q')
 var _ = require('underscore')
 var http = require('http')
 
@@ -10,10 +8,10 @@ var DEFAULT_OPTIONS = {
 }
 
 module.exports = function (options) {
-  var deferred = Q.defer()
-
-  options = _.clone(options)
+  options = options ? _.clone(options) : {}
   _.defaults(options, DEFAULT_OPTIONS)
+
+  var deferred = q.defer()
 
   var req = http.request(options, function (res) {
     var data = ''
@@ -28,8 +26,10 @@ module.exports = function (options) {
     deferred.reject(err)
   })
 
-  if (options.method === 'POST') {
-    req.setHeader('content-type', 'application/x-www-form-urlencoded')
+  if (options.headers) {
+    _.each(options.headers, function (value, key) {
+      req.setHeader(key, value)
+    })
   }
 
   if (options.body) {

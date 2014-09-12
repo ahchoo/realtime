@@ -1,65 +1,80 @@
-module.exports = function (callback) {
+module.exports = function () {
 
-  // For linting...
-  // var _ = require('underscore')
+  var _ = require('underscore')
   var md5 = require('MD5')
-  var async = require('async')
+  var q = require('q')
+  var objectId = require('mongoose').Types.ObjectId
 
   // init connection
   require('../lib/connect-db')()
 
   var models = require('../lib/models')
 
-  // User fixture
-  function initUserCollection(cb) {
-    initCollection('User', [
-      {username: 'fu', password: md5('123')},
-      {username: 'admin', password: md5('husky')}
-    ], cb)
-  }
+  // fixtures
+  return initCollection('User', [
+    {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+  ]).then(function () {
 
-  // Game fixture
-  function initGameCollection(cb) {
-    initCollection('Game', [], cb)
-  }
+    var ids = {
+      tesla: objectId(),
+      iphone: objectId()
+    }
 
-  // Item fixture
-  function initItemCollection(cb) {
-    initCollection('Item', [
+    return initCollection('Item', [
       {
-        title: 'shit',
+        id: ids.tesla,
+        title: 'Tesla Model S',
         countdown: 100,
         status: 'initialize',
-        price: 100
+        price: 75000
       }, {
-        title: 'fuck', // I like that
+        id: ids.iphone,
+        title: 'iPhone 6',
         countdown: 100,
         status: 'initialize',
-        price: 75
+        price: 850
       }
-    ], cb)
-  }
-
-
-  function initCollection(name, list, cb) {
-    // clear collection first
-    models[name].remove(function (err) {
-      if (err) {
-        console.log('Unable to clear User collection')
-        return
-      }
-
-      async.each(list, function(obj, cb) {
-        models[name].create(obj).then(function resolve(obj) {
-          console.log('Created', obj)
-          cb()
-        }, function error(err) {
-          console.warn('Unable to create document', err)
-          cb()
-        })
-      }, cb)
+    ]).then(function () {
+      return ids
     })
+  }).then(function (ids) {
+    return initCollection('Game', [{
+      item: ids.iphone,
+      capacity: 100,
+      countdown: 10
+    }, {
+      item: ids.tesla,
+      capactity: 50,
+      countdown: 15
+    }])
+  }).then(function () {
+    console.log('Initialize database succeed')
+  }).fail(function (reason) {
+    console.log('Initialize database failed, reason: ', reason)
+  })
+
+  // helper function
+  function initCollection(name, collection) {
+    var deferred = q.defer()
+
+    models[name].remove({}, function () {
+      var promises = _.map(collection, function (document) {
+        if (_.isFunction(document)) {
+          return document()
+        } else {
+          return models[name].create(document)
+        }
+      })
+
+      q.all(promises).then(function () {
+        deferred.resolve()
+      }, function (err) {
+        deferred.reject('Unable to init collection: ' + name + ', reason: ' + err.message)
+      })
+    })
+
+    return deferred.promise
   }
 
-  async.parallel([initUserCollection, initGameCollection, initItemCollection], callback)
 }
