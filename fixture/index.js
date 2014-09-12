@@ -15,6 +15,24 @@ module.exports = function () {
     {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
     {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
+    // roles
+    return initCollection('Role', [{
+      name: 'Admin',
+      description: 'Administrators'
+    }, {
+      name: 'Normal',
+      description: 'Normal Users'
+    }, {
+      name: 'Guest',
+      description: 'Guest'
+    }])
+  }).then(function () {
+    // privileges
+  }).then(function () {
+    // user in role
+  }).then(function () {
+    // privileges in role
+  }).then(function () {
 
     var ids = {
       tesla: objectId(),
@@ -60,6 +78,7 @@ module.exports = function () {
 
     models[name].remove({}, function () {
       var promises = _.map(collection, function (document) {
+        console.log(document)
         if (_.isFunction(document)) {
           return document()
         } else {
