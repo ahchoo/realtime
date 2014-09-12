@@ -10,8 +10,11 @@ var sessionStore = new connect.session.MemoryStore()
 
 process.env.AHCHOO_SITE_SECRET = 'ahchoo web site'
 
-// init db connection
-require('./lib/connect-db')()
+// do not connect to db in testing env
+if (process.env.NODE_ENV !== 'testing') {
+  // init db connection
+  require('./lib/connect-db')()
+}
 
 var app = express()
 

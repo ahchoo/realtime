@@ -1,6 +1,6 @@
 /* global describe, beforeEach, afterEach, it */
 
-var expect = require('expect.js')
+var should = require('should')
 var request = require('supertest')
 var mockgoose = require('mockgoose')
 var ObjectId = require('mongoose').Types.ObjectId
@@ -47,14 +47,16 @@ describe('Items test', function () {
         price: 150
       })
       .end(function (err, res) {
-        var item = res.body.data
-
-        expect(item._id).to.be.ok()
-        expect(item.title).to.be('Filco Blue')
-        expect(item.price).to.be(150)
+        res.body.should.match({
+          data: {
+            title: 'Filco Blue',
+            price: 150
+          }
+        })
 
         models.Item.find().exec().then(function (items) {
-          expect(items.length).to.be(3)
+          items.should.have.length(3)
+
           done()
         })
       })
@@ -64,27 +66,19 @@ describe('Items test', function () {
     request(app)
       .get('/api/items')
       .end(function (err, res) {
-        var items = res.body.data
+        res.body.data.should.have.length(2)
 
-        expect(items.length).to.be(2)
-
-        var iphone = _.find(items, function (item) {
-          return item._id === ids.iphone.toString()
+        res.body.should.match({
+          data: [{
+            title: 'iPhone 6',
+            description: 'bigger than bigger',
+            price: 750
+          }, {
+            title: 'Burger',
+            description: 'tasty',
+            price: 8
+          }]
         })
-
-        expect(iphone._id).to.be(ids.iphone.toString())
-        expect(iphone.title).to.be('iPhone 6')
-        expect(iphone.description).to.be('bigger than bigger')
-        expect(iphone.price).to.be(750)
-
-        var burger = _.find(items, function (item) {
-          return item._id === ids.burger.toString()
-        })
-
-        expect(burger._id).to.be(ids.burger.toString())
-        expect(burger.title).to.be('Burger')
-        expect(burger.description).to.be('tasty')
-        expect(burger.price).to.be(8)
 
         done()
       })
@@ -94,12 +88,13 @@ describe('Items test', function () {
     request(app)
       .get('/api/items/' + ids.iphone.toString())
       .end(function (err, res) {
-        var iphone = res.body.data
-
-        expect(iphone._id).to.be(ids.iphone.toString())
-        expect(iphone.title).to.be('iPhone 6')
-        expect(iphone.description).to.be('bigger than bigger')
-        expect(iphone.price).to.be(750)
+        res.body.should.match({
+          data: {
+            title: 'iPhone 6',
+            description: 'bigger than bigger',
+            price: 750
+          }
+        })
 
         done()
       })
@@ -110,14 +105,16 @@ describe('Items test', function () {
     request(app)
       .delete('/api/items/' + ids.iphone.toString())
       .end(function (err, res) {
-        var item = res.body.data
-
-        expect(item).to.be.ok()
+        res.body.should.match({
+          data: {
+            title: 'iPhone 6',
+            description: 'bigger than bigger',
+            price: 750
+          }
+        })
 
         models.Item.find().exec().then(function (items) {
-          expect(items.length).to.be(1)
-          expect(items[0].id).to.be(ids.burger.toString())
-
+          items.should.have.length(1)
           done()
         })
       })

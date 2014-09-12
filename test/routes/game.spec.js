@@ -1,6 +1,7 @@
 /* global describe, beforeEach, afterEach, it */
 
 var expect = require('expect.js')
+var should = require('should')
 var request = require('supertest')
 var mockgoose = require('mockgoose')
 var ObjectId = require('mongoose').Types.ObjectId
@@ -27,6 +28,7 @@ describe('game api', function () {
       return models.Item.find().exec()
     }).then(function (items) {
       item = items[0]
+
       return models.Game.create({
         _id: ids.game,
         item: String(item._id),
@@ -54,19 +56,22 @@ describe('game api', function () {
         countdown: 999
       })
       .end(function (err, res) {
-        expect(res.body.error).to.not.be.ok()
-        expect(res.body.data._id).to.be.ok()
-        expect(_.pick(res.body.data, 'capacity', 'status', 'countdown')).to.eql({
-          capacity: 1000,
-          status: 'stub status',
-          countdown: 999
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1000,
+            status: 'stub status',
+            countdown: 999,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
         })
-        expect(_.pick(res.body.data.item, 'title', 'price')).to.eql({
-          title: item.title,
-          price: item.price
-        })
+
         models.Game.find().exec().then(function(games) {
-          expect(games.length).to.be(2)
+          games.should.have.length(2)
           done()
         })
       })
@@ -76,21 +81,22 @@ describe('game api', function () {
     request(app)
       .get('/api/games')
       .end(function (err, res) {
-        expect(res.body.error).to.not.be.ok()
-        var games = res.body.data
-        expect(games.length).to.be(1)
-        var game1 = games[0]
-        expect(_.pick(game1, '_id', 'capacity', 'status', 'countdown')).to.eql({
-          _id: ids.game.toString(),
-          capacity: 1,
-          status: 'sss',
-          countdown: 2
+        res.body.data.should.have.length(1)
+
+        res.body.should.match({
+          data: [{
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }]
         })
-        expect(_.pick(game1.item, '_id', 'title', 'price')).to.eql({
-          _id: ids.item.toString(),
-          title: item.title,
-          price: item.price
-        })
+
         done()
       })
   })
@@ -99,18 +105,20 @@ describe('game api', function () {
     request(app)
       .get('/api/games/' + ids.game.toString())
       .end(function (err, res) {
-        expect(res.body.error).to.not.be.ok()
-        expect(_.pick(res.body.data, '_id', 'capacity', 'status', 'countdown')).to.eql({
-          _id: ids.game.toString(),
-          capacity: 1,
-          status: 'sss',
-          countdown: 2
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
         })
-        expect(_.pick(res.body.data.item, '_id', 'title', 'price')).to.eql({
-          _id: ids.item.toString(),
-          title: item.title,
-          price: item.price
-        })
+
         done()
       })
   })
@@ -119,20 +127,22 @@ describe('game api', function () {
     request(app)
       .delete('/api/games/' + ids.game.toString())
       .end(function (err, res) {
-        expect(res.body.error).to.not.be.ok()
-        expect(_.pick(res.body.data, '_id', 'capacity', 'status', 'countdown')).to.eql({
-          _id: ids.game.toString(),
-          capacity: 1,
-          status: 'sss',
-          countdown: 2
+        res.body.should.match({
+          data: {
+            _id: String,
+            capacity: 1,
+            status: 'sss',
+            countdown: 2,
+            item: {
+              _id: String,
+              title: 'iPhone 10',
+              price: 10000
+            }
+          }
         })
-        expect(_.pick(res.body.data.item, '_id', 'title', 'price')).to.eql({
-          _id: ids.item.toString(),
-          title: item.title,
-          price: item.price
-        })
+
         models.Game.find().exec().then(function (games) {
-          expect(games.length).to.be(0)
+          games.should.have.length(0)
           done()
         })
       })
