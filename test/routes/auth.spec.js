@@ -1,6 +1,6 @@
 /* global describe, before, after, it */
 
-var expect = require('expect.js')
+var should = require('should')
 var request = require('supertest')
 var mockgoose = require('mockgoose')
 var models = require('../../lib/models')
@@ -35,7 +35,7 @@ describe('auth api', function () {
         password: md5('123')
       })
       .end(function (err, res) {
-        expect(res.body).to.eql({
+        res.body.should.eql({
           data: {
             email: 'test@ahchoo.com',
             name: 'Ahchoo Tech',
@@ -56,7 +56,7 @@ describe('auth api', function () {
         password: md5('abcd')
       })
       .end(function (err, res) {
-        expect(res.body).to.eql({
+        res.body.should.eql({
           error: {message: 'Unmatched email and password'}
         })
 
@@ -73,7 +73,7 @@ describe('auth api', function () {
         password: md5('abcd')
       })
       .end(function (err, res) {
-        expect(res.body).to.eql({
+        res.body.should.eql({
           error: {message: 'Unmatched email and password'}
         })
 
@@ -90,7 +90,7 @@ describe('auth api', function () {
         password: md5('123')
       })
       .end(function (err, res) {
-        expect(res.body).to.eql({
+        res.body.should.eql({
           error: {message: 'Unmatched email and password'}
         })
 

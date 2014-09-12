@@ -1,6 +1,6 @@
 /* global describe, beforeEach, afterEach, it */
 
-var expect = require('expect.js')
+var should = require('should')
 var request = require('supertest')
 var mockgoose = require('mockgoose')
 var _ = require('underscore')
@@ -36,16 +36,18 @@ describe('user api', function () {
         password: md5('no pass')
       })
       .end(function (err, res) {
-        expect(res.body.error).to.not.be.ok()
-        expect(_.pick(res.body.data, 'email', 'name')).to.eql({
-          email: 'fuqiangstupid@ahchoo.com',
-          name: 'fuqiangstupid'
+        res.body.should.match({
+          data: {
+            email: 'fuqiangstupid@ahchoo.com',
+            name: 'fuqiangstupid',
+            token: String
+          }
         })
+
         models.User.find().exec().then(function (users) {
-          expect(users.length).to.be(2)
+          users.should.have.length(2)
           done()
         })
       })
   })
 })
-
