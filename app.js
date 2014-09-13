@@ -8,11 +8,10 @@ var fs = require('fs')
 
 var sessionStore = new connect.session.MemoryStore()
 
-process.env.AHCHOO_SITE_SECRET = 'ahchoo web site'
+var env = require('./lib/env')
 
 // do not connect to db in testing env
-if (process.env.NODE_ENV !== 'testing') {
-  // init db connection
+if (env.is.not.testing) {
   require('./lib/connect-db')()
 }
 
@@ -24,7 +23,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-app.use(cookieParser(process.env.AHCHOO_SITE_SECRET))
+app.use(cookieParser(env.SITE_SECRET))
 
 app.use(expressSession({
   key: 'express.sid',
