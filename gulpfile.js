@@ -41,6 +41,9 @@ gulp.task('lint', function () {
 gulp.task('watch', function () {
   gulp
     .watch(paths.client.scripts, ['build'])
+    .on('error', function () {
+      console.log(arguments)
+    })
 })
 
 gulp.task('initdb', function () {
