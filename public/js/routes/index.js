@@ -40,6 +40,12 @@ router
       ctrl: require('./signup')
     }).activate()
   })
+  .use('/admin-game/:gameId', function () {
+    new Ctrl({
+      view: '/views/admin-game.html',
+      ctrl: require('./admin-game')
+    }).activate()
+  })
 
 router.on('before change', function (url, params, prevent) {
   if (url !== '/login' && url !== '/signup' && !cookie.get('ahchoo_token')) {
