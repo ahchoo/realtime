@@ -16,24 +16,24 @@ module.exports = function (el) {
 
   var currentUri = window.location.href
 
+  var socketUrl
   // need different config for local and production env
   if (currentUri.indexOf('127.0.0.1') !== -1 ||
       currentUri.indexOf('localhost') !== -1) {
-    console.log('try to join')
-    socket = io.connect('127.0.0.1', {query: query})
+    socketUrl = '127.0.0.1'
   } else {
-    socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000', {query: query})
+    socketUrl = 'ws://realtime-ahchoo.rhcloud.com:8000'
   }
 
+  socket = io.connect(socketUrl, {query: query, 'forceNew': true})
+
   socket.on('connect', function () {
-    console.log('connected')
   })
   socket.on('player-joined', addUser)
   socket.on('players-joined', addUserCollection)
   socket.on('player-left', removeUser)
 
   function addUser(user) {
-    console.log(user.name)
     users.push(user)
   }
 
@@ -50,7 +50,6 @@ module.exports = function (el) {
   }
   
   function leaveRoom() {
-    console.log('bye')
     socket.disconnect()
     router.goto('/games')
   }
