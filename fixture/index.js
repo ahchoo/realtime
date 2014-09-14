@@ -13,7 +13,9 @@ module.exports = function () {
   // fixtures
   return initCollection('User', [
     {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+    {email: 'test@ahchoo.com', name: 'tester', password: md5('husky')},
+    {email: 'develop@ahchoo.com', name: 'develop', password: md5('husky')},
+    {email: 'admin@ahchoo.com', name: 'Admin', password: md5('husky'), isAdmin: true}
   ]).then(function () {
 
     var ids = {
