@@ -30,6 +30,18 @@ gulp.task('build', function () {
     .pipe(gulp.dest(paths.dist))
 })
 
+gulp.task('build:watch', function () {
+  gulp
+    .src(paths.entry)
+    .pipe(browserify())
+    .on('error', function (err) {
+      console.log(err.stack)
+      this.emit('end')
+    })
+    .pipe(rename({basename: 'app'}))
+    .pipe(gulp.dest(paths.dist))
+})
+
 gulp.task('lint', function () {
   gulp
     .src(paths.server.scripts.concat(paths.client.scripts))
@@ -40,10 +52,7 @@ gulp.task('lint', function () {
 
 gulp.task('watch', function () {
   gulp
-    .watch(paths.client.scripts, ['build'])
-    .on('error', function () {
-      console.log(arguments)
-    })
+    .watch(paths.client.scripts, ['build:watch'])
 })
 
 gulp.task('initdb', function () {
