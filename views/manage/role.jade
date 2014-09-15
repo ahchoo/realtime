@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  div.page-header
+    h1 #{title}
+  include components/message
+  div.row
+    form.form-horizontal(method="POST")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Name
+        div.col-sm-10
+          input(name="name", type="text", class="form-control", placeholder="Name", value="#{role.name}")
+      div.form-group
+        label.control-label.col-sm-2 Description
+        div.col-sm-10
+          input(name="description", type="text", class="form-control", placeholder="Description", value="#{role.description}")
+      div.form-group
+        label.control-label.col-sm-2 Users
+        div.col-sm-10
+          each user in users
+            label.checkbox-inline
+              if user.selected
+                input(name="users", type="checkbox", value="#{user._id}", checked="checked")
+                | #{user.email}
+              else
+                input(name="users", type="checkbox", value="#{user._id}")
+                | #{user.email}
+      div.form-group
+        div.col-sm-offset-2.col-sm-10
+          div.btn-group
+            button.btn.btn-primary(type="submit") OK
+            button.btn.btn-default: a(href="/manage/roles") Cancel
+      input(name="_id", type="hidden", value="#{role._id || ''}")
+    if role._id
+      form.form-horizontal(method="POST", action="/manage/roles/#{role._id}/delete")
+        div.form-group
+          div.col-sm-offset-2.col-sm-10
+            div.btn-group
+              button.btn.btn-danger(type="submit") DELETE THIS ROLE
+        input(name="_id", type="hidden", value="#{role._id}")

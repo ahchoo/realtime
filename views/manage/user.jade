@@ -3,14 +3,7 @@ extends layout
 block content
   div.page-header
     h1 #{title}
-  if errors
-    div.row
-      each error in errors
-        div.alert.alert-danger #{error}
-  if infoes
-    div.row
-      each info in infoes
-        div.alert.alert-info #{info}
+  include components/message
   div.row
     form.form-horizontal(method="POST")
       div.form-group
