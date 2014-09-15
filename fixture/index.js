@@ -23,7 +23,8 @@ module.exports = function () {
 
   var privilegeIds = {
     postApiAuth: objectId(),
-    postApiUser: objectId()
+    postApiUser: objectId(),
+    management: objectId()
   }
 
   // fixtures
@@ -51,12 +52,17 @@ module.exports = function () {
       _id: privilegeIds.postApiAuth,
       name: 'user login',
       method: 'post',
-      path: '/auth'
+      path: '^/api/auth$'
     }, {
       _id: privilegeIds.postApiUser,
       name: 'create user',
       method: 'post',
-      path: '/users'
+      path: '^/api/users$'
+    }, {
+      _id: privilegeIds.management,
+      name: 'web site management',
+      method: '.*',
+      path: '^/manage'
     }])
   }).then(function () {
     // user in role
@@ -80,6 +86,9 @@ module.exports = function () {
       role: roleIds.admin
     }, {
       privilege: privilegeIds.postApiUser,
+      role: roleIds.guest
+    }, {
+      privilege: privilegeIds.management,
       role: roleIds.admin
     }])
   }).then(function () {

@@ -3,27 +3,61 @@ extends layout
 block content
   div.page-header
     h1 #{title}
+  if errors
+    div.row
+      each error in errors
+        div.alert.alert-danger #{error}
+  if infoes
+    div.row
+      each info in infoes
+        div.alert.alert-info #{info}
   div.row
     form.form-horizontal(method="POST")
       div.form-group
-        label.control-label.col-sm-2 Email
+        label.control-label.col-sm-2 
+          span(style="color:red") *
+          | Email
         div.col-sm-10
           input(name="email", type="email", class="form-control", placeholder="Email", value="#{user.email}")
       div.form-group
-        label.control-label.col-sm-2 Name
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Name
         div.col-sm-10
           input(name="name", type="text", class="form-control", placeholder="Name", value="#{user.name}")
       div.form-group
-        label.control-label.col-sm-2 Password
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Password
         div.col-sm-10
           input(name="password", type="password", class="form-control", placeholder="Password")
       div.form-group
-        label.control-label.col-sm-2 Confirm Password
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Confirm Password
         div.col-sm-10
           input(name="password2", type="password", class="form-control", placeholder="Password Again")
       div.form-group
+        label.control-label.col-sm-2 Roles
+        div.col-sm-10
+          each role in roles
+            label.checkbox-inline
+              if role.selected
+                input(name="roles", type="checkbox", value="#{role._id}", checked="checked")
+                | #{role.name}
+              else
+                input(name="roles", type="checkbox", value="#{role._id}")
+                | #{role.name}
+      div.form-group
         div.col-sm-offset-2.col-sm-10
           div.btn-group
-            button.btn.btn-default(type="submit") OK
+            button.btn.btn-primary(type="submit") OK
             button.btn.btn-default: a(href="/manage/users") Cancel
       input(name="_id", type="hidden", value="#{user._id || ''}")
+    if user._id
+      form.form-horizontal(method="POST", action="/manage/users/#{user._id}/delete")
+        div.form-group
+          div.col-sm-offset-2.col-sm-10
+            div.btn-group
+              button.btn.btn-danger(type="submit") DELETE THIS USER
+        input(name="_id", type="hidden", value="#{user._id || ''}")
