@@ -28,40 +28,60 @@ module.exports = function () {
 
   // fixtures
   return initCollection('User', [
-    {id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+    {_id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+    {_id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
     // roles
     return initCollection('Role', [{
-      id: roleIds.admin,
+      _id: roleIds.admin,
       name: 'Admin',
       description: 'Administrators'
     }, {
-      id: roleIds.normal,
+      _id: roleIds.normal,
       name: 'Normal',
       description: 'Normal Users'
     }, {
-      id: roleIds.guest,
+      _id: roleIds.guest,
       name: 'Guest',
       description: 'Guest'
     }])
   }).then(function () {
     // privileges
     return initCollection('Privilege', [{
-      id: privilegeIds.postApiAuth,
+      _id: privilegeIds.postApiAuth,
       name: 'user login',
       method: 'post',
       path: '/auth'
     }, {
-      id: privilegeIds.postApiUser,
+      _id: privilegeIds.postApiUser,
       name: 'create user',
       method: 'post',
       path: '/users'
     }])
   }).then(function () {
     // user in role
+    return initCollection('UserInRole', [{
+      user: userIds.fu,
+      role: roleIds.normal
+    }, {
+      user: userIds.test,
+      role: roleIds.admin
+    }])
   }).then(function () {
     // privileges in role
+    return initCollection('PrivilegeInRole', [{
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.guest
+    }, {
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.nomal
+    }, {
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.admin
+    }, {
+      privilege: privilegeIds.postApiUser,
+      role: roleIds.admin
+    }])
   }).then(function () {
 
     var ids = {
