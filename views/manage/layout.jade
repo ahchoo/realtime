@@ -1,0 +1,17 @@
+html
+  head
+    title Ahchoo Management - #{title}
+    link(rel="stylesheet", href="/vendor/bootstrap/dist/css/bootstrap.css")
+  body
+    nav.navbar.navbar-inverse
+      div.container
+        div.navbar-header
+          a.navbar-brand Ahchoo Management
+        div#navbar.navbar-collapse
+          ul.nav.navbar-nav
+            li: a(href="/manage") Home
+            li: a(href="/manage/users") Users
+            li: a(href="/manage/items") Items
+
+    div.container
+      block content
