@@ -74,7 +74,7 @@ module.exports = function () {
       role: roleIds.guest
     }, {
       privilege: privilegeIds.postApiAuth,
-      role: roleIds.nomal
+      role: roleIds.normal
     }, {
       privilege: privilegeIds.postApiAuth,
       role: roleIds.admin
