@@ -29,7 +29,7 @@ module.exports = function (el) {
       }
     },
     signUp: function () {
-      router.goto('/sign-up')
+      router.goto('/signup')
     }
   }, el)
 }
