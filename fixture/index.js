@@ -71,13 +71,13 @@ module.exports = function () {
 
     return initCollection('Item', [
       {
-        id: ids.tesla,
+        _id: ids.tesla,
         title: 'Tesla Model S',
         countdown: 100,
         status: 'initialize',
         price: 75000
       }, {
-        id: ids.iphone,
+        _id: ids.iphone,
         title: 'iPhone 6',
         countdown: 100,
         status: 'initialize',
@@ -93,7 +93,7 @@ module.exports = function () {
       countdown: 10
     }, {
       item: ids.tesla,
-      capactity: 50,
+      capacity: 50,
       countdown: 15
     }])
   }).then(function () {
