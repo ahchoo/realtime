@@ -99,7 +99,4 @@ module.exports = function (el) {
 
   ko.applyBindings(game, el)
 
-  // ko.applyBindings(new GameView(router.params.gameId), el)
-  // ko.applyBindings({itemName: 'adfksadfhksadhjf'}, el)
-
 }
