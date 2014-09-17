@@ -5,8 +5,6 @@ module.exports = function (el) {
   var cookie = require('cookie-cutter')
   var _ = require('underscore')
   var window = require('global/window')
-  var q = require('q')
-  var $ = require('jquery-browserify')
 
   var api = require('../lib/api')
   var router = require('../lib/router')
@@ -45,16 +43,11 @@ module.exports = function (el) {
 
     this.tId = setTimeout(function () {
       self.timeRemaining(self.timeRemaining() - 1)
-      self.updateTime()
 
       if (self.timeRemaining() > 0) {
         self.start()
       }
     }, 100)
-  }
-
-  GameView.prototype.updateTime = function () {
-    $('#time_remaining').text(String((this.timeRemaining() / 10).toFixed(1)))
   }
 
   GameView.prototype.reset = function () {
