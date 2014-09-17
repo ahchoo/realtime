@@ -16,7 +16,7 @@ module.exports = function (el) {
 
     this.socket = null
     this.gameId = gameId
-    this.timeRemaining = 100
+    this.timeRemaining = ko.observable(100)
     this.started = false
     this.users = ko.observableArray()
 
@@ -44,17 +44,17 @@ module.exports = function (el) {
     var self = this
 
     this.tId = setTimeout(function () {
-      self.timeRemaining -= 1
+      self.timeRemaining(self.timeRemaining() - 1)
       self.updateTime()
 
-      if (self.timeRemaining > 0) {
+      if (self.timeRemaining() > 0) {
         self.start()
       }
     }, 100)
   }
 
   GameView.prototype.updateTime = function () {
-    $('#time_remaining').text(String((this.timeRemaining / 10).toFixed(1)))
+    $('#time_remaining').text(String((this.timeRemaining() / 10).toFixed(1)))
   }
 
   GameView.prototype.reset = function () {
@@ -62,7 +62,7 @@ module.exports = function (el) {
       clearTimeout(this.tId)
     }
 
-    this.timeRemaining = 100
+    this.timeRemaining(100)
     this.start()
   }
 
