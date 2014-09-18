@@ -1,21 +1,25 @@
 <div class="row">
-  <div class="col-md-12">
-    <h2 data-bind="text: name"></h2>
-  </div>
+  <h2 data-bind="text: itemName"></h2> <!-- item name -->
 
-  <div class="col-md-12">
-    <div class="row">
+  <div class="row">
 
-      <div class="col-md-4">
-        <ul class="list-group" data-bind="foreach: users">
-          <li class="list-group-item" data-bind="text: name"></li>
-        </ul>
-      </div>
+    <div class="col-md-3">
+      <ul class="list-group" data-bind="foreach: users">
+        <li class="list-group-item" data-bind="text: name"></li>
+      </ul>
+    </div> <!-- user list -->
 
-      <div class="col-md-8">
+    <div class="col-md-9">
+
+      <!-- <h3 data-bind="text: currentOwner.name"></h3> -->
+
+      <div class="row">
+        <div class="col-md-12">
+          <p id="time_remaining"></p>
+        </div>
       </div>
 
     </div>
-  </div>
 
+  </div>
 </div>
