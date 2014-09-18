@@ -14,24 +14,29 @@ module.exports = function (el) {
 
     this.socket = null
     this.gameId = gameId
-    this.timeRemaining = ko.observable(100)
+    this.timeRemaining = ko.observable()
     this.started = false
     this.users = ko.observableArray()
 
     this.connectSocket()
-    this.socket.on('player-joined', function (user) {
-      self.addUser(user)
+    this.socket.on('player joined', function (user) {
+      if (_.isArray(user)) {
+        self.addUserCollection(user)
+      } else {
+        self.addUser(user)
+      }
     })
-    this.socket.on('players-joined', function (users) {
-      self.addUserCollection(users)
-    })
-    this.socket.on('player-left', function (user) {
+    this.socket.on('player left', function (user) {
       self.removeUser(user)
     })
 
-    this.itemName = ko.observable()
+    this.socket.on('game start', function () {
+      console.log('fucking start game')
 
-    setTimeout(function () { self.reset() }, 3000)
+      self.reset()
+    })
+
+    this.itemName = ko.observable()
 
     api.game.one({id: gameId}).then(function (game) {
       self.itemName(game.item.title)
@@ -42,9 +47,10 @@ module.exports = function (el) {
     var self = this
 
     this.tId = setTimeout(function () {
-      self.timeRemaining(self.timeRemaining() - 1)
+      self.countdown -= 1
+      self.timeRemaining((self.countdown / 10).toFixed(1))
 
-      if (self.timeRemaining() > 0) {
+      if (self.countdown > 0) {
         self.start()
       }
     }, 100)
@@ -55,7 +61,7 @@ module.exports = function (el) {
       clearTimeout(this.tId)
     }
 
-    this.timeRemaining(100)
+    this.countdown = 100
     this.start()
   }
 
