@@ -10,11 +10,88 @@ module.exports = function () {
 
   var models = require('../lib/models')
 
+  var userIds = {
+    fu: objectId(),
+    test: objectId()
+  }
+
+  var roleIds = {
+    admin: objectId(),
+    normal: objectId(),
+    guest: objectId()
+  }
+
+  var privilegeIds = {
+    postApiAuth: objectId(),
+    postApiUser: objectId(),
+    management: objectId()
+  }
+
   // fixtures
   return initCollection('User', [
-    {email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+    {_id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
+    {_id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
   ]).then(function () {
+    // roles
+    return initCollection('Role', [{
+      _id: roleIds.admin,
+      name: 'Admin',
+      description: 'Administrators'
+    }, {
+      _id: roleIds.normal,
+      name: 'Normal',
+      description: 'Normal Users'
+    }, {
+      _id: roleIds.guest,
+      name: 'Guest',
+      description: 'Guest'
+    }])
+  }).then(function () {
+    // privileges
+    return initCollection('Privilege', [{
+      _id: privilegeIds.postApiAuth,
+      name: 'user login',
+      method: 'post',
+      path: '^/api/auth$'
+    }, {
+      _id: privilegeIds.postApiUser,
+      name: 'create user',
+      method: 'post',
+      path: '^/api/users$'
+    }, {
+      _id: privilegeIds.management,
+      name: 'web site management',
+      method: '.*',
+      path: '^/manage'
+    }])
+  }).then(function () {
+    // user in role
+    return initCollection('UserInRole', [{
+      user: userIds.fu,
+      role: roleIds.normal
+    }, {
+      user: userIds.test,
+      role: roleIds.admin
+    }])
+  }).then(function () {
+    // privileges in role
+    return initCollection('PrivilegeInRole', [{
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.guest
+    }, {
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.normal
+    }, {
+      privilege: privilegeIds.postApiAuth,
+      role: roleIds.admin
+    }, {
+      privilege: privilegeIds.postApiUser,
+      role: roleIds.guest
+    }, {
+      privilege: privilegeIds.management,
+      role: roleIds.admin
+    }])
+  }).then(function () {
 
     var ids = {
       tesla: objectId(),

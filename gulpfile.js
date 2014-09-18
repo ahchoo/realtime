@@ -61,6 +61,14 @@ gulp.task('initdb', function () {
   })
 })
 
+gulp.task('dropdb', function () {
+  require('./lib/connect-db')().then(function () {
+    require('mongoose').connection.db.dropDatabase()
+    require('mongoose').disconnect()
+    console.log('database droped')
+  })
+})
+
 gulp.task('test', function () {
   process.env.NODE_ENV = 'testing'
 

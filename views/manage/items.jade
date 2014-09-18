@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  div.page-header
+    h1 Items
+  div.row
+    div.btn-group
+      button.btn.btn-default
+        a(href="/manage/items/new")
+          span.glyphicon.glyphicon-plus
+          | Add
+  div.row
+    table.table
+      thead
+        th Title
+        th Price
+      tbody
+        each item in items
+          tr
+            td: a(href="/manage/items/#{item._id}") #{item.title}
+            td #{item.price}

@@ -37,7 +37,7 @@ app.use(require('./lib/routes'))
 app.use(require('./lib/middlewares/error-handler')())
 
 // templates
-app.set('views', path.join(__dirname, '/demo-views'))
+app.set('views', path.join(__dirname, '/views'))
 
 // serve static
 app.use('/demo', express.static(path.join(__dirname, '/demo')))

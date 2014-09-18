@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  div.page-header
+    h1 Roles
+  div.row
+    div.btn-group
+      button.btn.btn-default
+        a(href="/manage/roles/new")
+          span.glyphicon.glyphicon-plus
+          | Add
+  div.row
+    table.table
+      thead
+        th Name
+        th Description
+      tbody
+        each role in roles
+          tr
+            td: a(href="/manage/roles/#{role._id}") #{role.name}
+            td #{role.description}
