@@ -28,6 +28,19 @@ block content
                 input(name="users", type="checkbox", value="#{user._id}")
                 | #{user.email}
       div.form-group
+        label.control-label.col-sm-2 Privileges:
+        div.col-sm-10
+          each privilege in privileges
+            div.checkbox
+              if privilege.selected
+                label
+                  input(name="privileges", type="checkbox", value="#{privilege._id}", checked="checked")
+                  | #{privilege.name} - #{privilege.method} - #{privilege.path}
+              else
+                label
+                  input(name="privileges", type="checkbox", value="#{privilege._id}")
+                  | #{privilege.name} - #{privilege.method} - #{privilege.path}
+      div.form-group
         div.col-sm-offset-2.col-sm-10
           div.btn-group
             button.btn.btn-primary(type="submit") OK
