@@ -1,0 +1,4 @@
+each role in roles
+  label.checkbox-inline
+    input(name="roles", type="checkbox", value="#{role._id}", checked=role.selected)
+    | #{role.name}

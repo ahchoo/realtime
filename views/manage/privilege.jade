@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  div.page-header
+    h1 #{title}
+  include components/message
+  div.row
+    form.form-horizontal(method="POST")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Name
+        div.col-sm-10
+          input(name="name", type="text", class="form-control", placeholder="Name", value="#{privilege.name}")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Method
+        div.col-sm-10
+          input(name="method", type="text", class="form-control", placeholder="Method", value="#{privilege.method}")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Path
+        div.col-sm-10
+          input(name="path", type="text", class="form-control", placeholder="Path", value="#{privilege.path}")
+      div.form-group
+        label.control-label.col-sm-2 Roles
+        div.col-sm-10
+          include components/role-picker
+      div.form-group
+        div.col-sm-offset-2.col-sm-10
+          div.btn-group
+            button.btn.btn-primary(type="submit") OK
+            button.btn.btn-default: a(href="/manage/privileges") Cancel
+      if (privilege._id)
+        input(name="_id", type="hidden", value="#{privilege._id}")
+    if (privilege._id)
+      form.form-horizontal(method="POST", action="/manage/privileges/#{privilege._id}/delete")
+        div.form-group
+          div.col-sm-offset-2.col-sm-10
+            div.btn-group
+              button.btn.btn-danger(type="submit") DELETE THIS PRIVILEGE
+        input(name="_id", type="hidden", value="#{privilege._id}")
+

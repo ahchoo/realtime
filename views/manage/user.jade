@@ -33,14 +33,7 @@ block content
       div.form-group
         label.control-label.col-sm-2 Roles
         div.col-sm-10
-          each role in roles
-            label.checkbox-inline
-              if role.selected
-                input(name="roles", type="checkbox", value="#{role._id}", checked="checked")
-                | #{role.name}
-              else
-                input(name="roles", type="checkbox", value="#{role._id}")
-                | #{role.name}
+          include components/role-picker
       div.form-group
         div.col-sm-offset-2.col-sm-10
           div.btn-group

@@ -21,25 +21,16 @@ block content
         div.col-sm-10
           each user in users
             label.checkbox-inline
-              if user.selected
-                input(name="users", type="checkbox", value="#{user._id}", checked="checked")
-                | #{user.email}
-              else
-                input(name="users", type="checkbox", value="#{user._id}")
-                | #{user.email}
+              input(name="users", type="checkbox", value="#{user._id}", checked=user.selected)
+              | #{user.email}
       div.form-group
         label.control-label.col-sm-2 Privileges:
         div.col-sm-10
           each privilege in privileges
             div.checkbox
-              if privilege.selected
-                label
-                  input(name="privileges", type="checkbox", value="#{privilege._id}", checked="checked")
-                  | #{privilege.name} - #{privilege.method} - #{privilege.path}
-              else
-                label
-                  input(name="privileges", type="checkbox", value="#{privilege._id}")
-                  | #{privilege.name} - #{privilege.method} - #{privilege.path}
+              label
+                input(name="privileges", type="checkbox", value="#{privilege._id}", checked=privilege.selected)
+                | #{privilege.name} - #{privilege.method} - #{privilege.path}
       div.form-group
         div.col-sm-offset-2.col-sm-10
           div.btn-group
