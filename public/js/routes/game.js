@@ -31,9 +31,15 @@ module.exports = function (el) {
     })
 
     this.socket.on('game start', function () {
-      console.log('fucking start game')
+      self.start()
+    })
 
+    this.socket.on('game reset', function () {
       self.reset()
+    })
+
+    this.socket.on('game over', function () {
+      self.end()
     })
 
     this.itemName = ko.observable()
@@ -44,6 +50,11 @@ module.exports = function (el) {
   }
 
   GameView.prototype.start = function () {
+    this.countdown = 100
+    this.tick()
+  }
+
+  GameView.prototype.tick = function () {
     var self = this
 
     this.tId = setTimeout(function () {
@@ -51,7 +62,7 @@ module.exports = function (el) {
       self.timeRemaining((self.countdown / 10).toFixed(1))
 
       if (self.countdown > 0) {
-        self.start()
+        self.tick()
       }
     }, 100)
   }
@@ -60,13 +71,11 @@ module.exports = function (el) {
     if (this.tId) {
       clearTimeout(this.tId)
     }
-
-    this.countdown = 100
     this.start()
   }
 
-  GameView.prototype.over = function () {
-    clearInterval(this.intervalId)
+  GameView.prototype.end = function () {
+    clearTimeout(this.tId)
   }
 
   GameView.prototype.addUser = function (user) {
@@ -85,6 +94,11 @@ module.exports = function (el) {
     this.users.remove(function (user) {
       return user._id === target._id
     })
+  }
+
+  GameView.prototype.betForIt = function () {
+    this.socket.emit('game reset')
+    this.reset()
   }
 
   GameView.prototype.connectSocket = function () {
