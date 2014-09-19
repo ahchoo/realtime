@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  div.page-header
+    h1 Privileges
+  div.row
+    div.btn-group
+      button.btn.btn-default
+        a(href="/manage/privileges/new")
+          span.glyphicon.glyphicon-plus
+          | Add
+  div.row
+    table.table
+      thead
+        th Name
+        th Method
+        th Path
+      tbody
+        each privilege in privileges
+          tr
+            td: a(href="/manage/privileges/#{privilege._id}") #{privilege.name}
+            td #{privilege.method}
+            td #{privilege.path}
