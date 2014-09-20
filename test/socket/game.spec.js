@@ -1,7 +1,7 @@
 var Game = require('../../lib/socket/game')
 var sinon = require('sinon')
 
-describe.only('Realtime game model', function () {
+describe('Realtime game model', function () {
   var game
   var clock
 
