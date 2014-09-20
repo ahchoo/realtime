@@ -17,6 +17,7 @@ module.exports = function (el) {
     this.timeRemaining = ko.observable()
     this.started = false
     this.users = ko.observableArray()
+    this.owner = ko.observable()
 
     this.connectSocket()
     this.socket.on('player joined', function (user) {
@@ -34,11 +35,11 @@ module.exports = function (el) {
       self.start()
     })
 
-    this.socket.on('game reset', function () {
-      self.reset()
+    this.socket.on('game reset', function (user) {
+      self.reset(user)
     })
 
-    this.socket.on('game over', function () {
+    this.socket.on('game end', function () {
       self.end()
     })
 
@@ -67,15 +68,19 @@ module.exports = function (el) {
     }, 100)
   }
 
-  GameView.prototype.reset = function () {
+  GameView.prototype.reset = function (user) {
     if (this.tId) {
       clearTimeout(this.tId)
     }
     this.start()
+    this.owner(user.name)
   }
 
   GameView.prototype.end = function () {
     clearTimeout(this.tId)
+    if (this.owner()) {
+      window.alert(this.owner() + ' is the winner!')
+    }
   }
 
   GameView.prototype.addUser = function (user) {
@@ -98,7 +103,6 @@ module.exports = function (el) {
 
   GameView.prototype.betForIt = function () {
     this.socket.emit('game reset')
-    this.reset()
   }
 
   GameView.prototype.connectSocket = function () {
