@@ -44,6 +44,8 @@ describe.only('Realtime game model', function () {
   })
 
   it('should reset the game', function () {
+    game.join({id: 'foo'})
+
     game.start()
 
     clock.tick(5000)
@@ -57,6 +59,33 @@ describe.only('Realtime game model', function () {
     game.emit.calledWith('end').should.be.false
 
     clock.tick(5000)
+
+    game.emit.calledWith('end').should.be.true
+  })
+
+  it('cannot reset game if player not exists', function () {
+    game.start()
+
+    clock.tick(3000)
+
+    game.reset({id: 'foo'})
+
+    clock.tick(7000)
+
+    game.emit.calledWith('end').should.be.true
+  })
+
+  it('cannot reset game if balance is 0', function () {
+    game.join({id: 'foo'})
+    game.balance.foo = 0
+
+    game.start()
+
+    clock.tick(7000)
+
+    game.reset({id: 'foo'})
+
+    clock.tick(3000)
 
     game.emit.calledWith('end').should.be.true
   })
