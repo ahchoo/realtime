@@ -43,6 +43,18 @@ describe('Realtime game model', function () {
     game.emit.calledWith('end').should.be.true
   })
 
+  it('should update game status', function () {
+    game.status.should.equal('idle')
+
+    game.start()
+
+    game.status.should.equal('started')
+
+    clock.tick(10000)
+
+    game.status.should.equal('ended')
+  })
+
   it('should reset the game', function () {
     game.join({id: 'foo'})
 
@@ -88,6 +100,13 @@ describe('Realtime game model', function () {
     clock.tick(3000)
 
     game.emit.calledWith('end').should.be.true
+  })
+
+  it('cannot reset game if game is not started', function () {
+    game.join({id: 'foo'})
+    game.reset({id: 'foo'})
+
+    game.emit.calledWith('reset', {id: 'foo'}).should.be.false
   })
 
 })
