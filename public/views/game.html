@@ -11,13 +11,14 @@
 
     <div class="col-md-9">
 
-      <h3 data-bind="text: owner"></h3>
+      <p data-bind="if: owner">The owner is : <span data-bind="text: owner"></span></p>
 
       <div class="row">
         <div class="col-md-12">
           <p data-bind="text: timeRemaining"></p>
 
-          <button class="btn btn-primary" data-bind="click: betForIt">It's mine!</button>
+          <button class="btn btn-primary" data-bind="click: betForIt, attr: {disabled: betDisabled}">It's mine!</button>
+          <p>Times remaining: <span data-bind="text: balance"></span></p>
         </div>
       </div>
 

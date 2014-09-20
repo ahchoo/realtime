@@ -19,6 +19,11 @@ module.exports = function (el) {
     this.users = ko.observableArray()
     this.owner = ko.observable()
 
+    this.balance = ko.observable(3)
+    this.betDisabled = ko.computed(function () {
+      return !self.balance()
+    })
+
     this.connectSocket()
     this.socket.on('player joined', function (user) {
       if (_.isArray(user)) {
@@ -102,7 +107,10 @@ module.exports = function (el) {
   }
 
   GameView.prototype.betForIt = function () {
-    this.socket.emit('game reset')
+    if (this.balance()) {
+      this.socket.emit('game reset')
+      this.balance(this.balance() - 1)
+    }
   }
 
   GameView.prototype.connectSocket = function () {
