@@ -11,6 +11,7 @@ module.exports = function () {
   var models = require('../lib/models')
 
   var userIds = {
+    admin: objectId(),
     fu: objectId(),
     test: objectId()
   }
@@ -22,6 +23,7 @@ module.exports = function () {
   }
 
   var privilegeIds = {
+    admin: objectId(),
     postApiAuth: objectId(),
     postApiUser: objectId(),
     management: objectId()
@@ -30,7 +32,8 @@ module.exports = function () {
   // fixtures
   return initCollection('User', [
     {_id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
-    {_id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')}
+    {_id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
+    {_id: userIds.admin, email: 'admin@ahchoo.com', name: 'Admin', password: md5('123')}
   ]).then(function () {
     // roles
     return initCollection('Role', [{
@@ -63,6 +66,11 @@ module.exports = function () {
       name: 'web site management',
       method: '.*',
       path: '^/manage'
+    }, {
+      _id: privilegeIds.admin,
+      name: 'all privileges',
+      method: '.*',
+      path: '.*'
     }])
   }).then(function () {
     // user in role
@@ -71,6 +79,9 @@ module.exports = function () {
       role: roleIds.normal
     }, {
       user: userIds.test,
+      role: roleIds.admin
+    }, {
+      user: userIds.admin,
       role: roleIds.admin
     }])
   }).then(function () {
@@ -82,13 +93,10 @@ module.exports = function () {
       privilege: privilegeIds.postApiAuth,
       role: roleIds.normal
     }, {
-      privilege: privilegeIds.postApiAuth,
-      role: roleIds.admin
-    }, {
       privilege: privilegeIds.postApiUser,
       role: roleIds.guest
     }, {
-      privilege: privilegeIds.management,
+      privilege: privilegeIds.admin,
       role: roleIds.admin
     }])
   }).then(function () {
