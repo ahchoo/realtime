@@ -1,0 +1,14 @@
+if items && items.length
+  table.table
+    thead
+      th
+      th Title
+      th Price
+    tbody
+      each item in items
+        tr
+          td.radio
+            label
+              input(name="items", type="radio", value="#{item._id}", checked=item.selected)
+          td #{item.title}
+          td #{item.price}

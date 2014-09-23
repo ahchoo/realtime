@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  div.page-header
+    h1 #{title}
+  include components/message
+  div.row
+    form.form-horizontal(method="POST")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color:red") *
+          | Item
+        div.col-sm-10
+          include components/item-picker
+      div.form-group
+        label.control-label.col-sm-2 Capacity
+        div.col-sm-10
+          input.form-control(name="capacity", type="text", value="#{game.capacity || ''}", placeholder="Capacity")
+      div.form-group
+        label.control-label.col-sm-2 Count Down
+        div.col-sm-10
+          input.form-control(name="countdown", type="text", value="#{game.countdown || ''}", placeholder="Count Down")
+      div.form-group
+        label.control-label.col-sm-2 Status
+        div.col-sm-10
+          input.form-control(name="status", type="text", value="#{game.status || ''}", placeholder="Status")
+      div.form-group
+        div.col-sm-offset-2.col-sm-10
+          div.btn-group
+            button.btn.btn-primary(type="submit") OK
+            button.btn.btn-default: a(href="/manage/games") Cancel
+      if game._id
+        input(name="_id", type="hidden", value="#{game._id}")
+    if game._id
+      form.form-horizontal(method="POST", action="/manage/games/#{game._id}/delete")
+        div.form-group
+          div.col-sm-offset-2.col-sm-10
+            div.btn-group
+              button.btn.btn-danger(type="submit") DELETE THIS GAME
+        input(name="_id", type="hidden", value="#{game._id}")

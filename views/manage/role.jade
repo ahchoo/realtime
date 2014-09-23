@@ -19,18 +19,11 @@ block content
       div.form-group
         label.control-label.col-sm-2 Users
         div.col-sm-10
-          each user in users
-            label.checkbox-inline
-              input(name="users", type="checkbox", value="#{user._id}", checked=user.selected)
-              | #{user.email}
+          include components/users-picker
       div.form-group
         label.control-label.col-sm-2 Privileges:
         div.col-sm-10
-          each privilege in privileges
-            div.checkbox
-              label
-                input(name="privileges", type="checkbox", value="#{privilege._id}", checked=privilege.selected)
-                | #{privilege.name} - #{privilege.method} - #{privilege.path}
+          include components/privileges-picker
       div.form-group
         div.col-sm-offset-2.col-sm-10
           div.btn-group

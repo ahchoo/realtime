@@ -1,0 +1,4 @@
+each user in users
+  label.checkbox-inline
+    input(name="users", type="checkbox", value="#{user._id}", checked=user.selected)
+    | #{user.email}

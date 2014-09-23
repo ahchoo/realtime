@@ -1,0 +1,5 @@
+each privilege in privileges
+  div.checkbox
+    label
+      input(name="privileges", type="checkbox", value="#{privilege._id}", checked=privilege.selected)
+      | #{privilege.name} - #{privilege.method} - #{privilege.path}
