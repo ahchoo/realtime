@@ -9,6 +9,6 @@ if items && items.length
         tr
           td.radio
             label
-              input(name="items", type="radio", value="#{item._id}", checked=item.selected)
+              input(name="item", type="radio", value="#{item._id}", checked=item.selected)
           td #{item.title}
           td #{item.price}
