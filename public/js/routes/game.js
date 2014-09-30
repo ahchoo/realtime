@@ -77,6 +77,10 @@ module.exports = function (el) {
     if (this.tId) {
       clearTimeout(this.tId)
     }
+    if (user._id) {
+      this.balance(this.balance() - 1)
+    }
+
     this.start()
     this.owner(user.name)
   }
@@ -109,7 +113,6 @@ module.exports = function (el) {
   GameView.prototype.betForIt = function () {
     if (this.balance()) {
       this.socket.emit('game reset')
-      this.balance(this.balance() - 1)
     }
   }
 
