@@ -15381,7 +15381,6 @@ ko.applyBindings({
       password: password
     }).then(function (user) {
       cookie.set('ahchoo_token', user.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
-
       location.href = '/'
     })
   },

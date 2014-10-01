@@ -1,0 +1,20 @@
+extends _layout
+
+block content
+  div.row(style="margin-top: 100px")
+    div.col-sm-offset-3.col-sm-6
+
+      div(role="form")
+        div.form-group
+          input.form-control(type="email", data-bind="textInput: email", placeholder="Email")
+
+        div.form-group
+          input.form-control(type="password", data-bind="textInput: password, event: {keypress: loginByKey}", placeholder="Password")
+
+        div.form-group
+          button.btn.btn-primary.btn-block(data-bind="click: login") Login to Ahchoo
+
+        a.pull-right(href="/signup") Have no account? Sign up here!
+
+block script
+  script(src="js/routes/login.js")

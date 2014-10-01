@@ -23,11 +23,12 @@ var paths = {
 }
 
 gulp.task('build', function () {
-  gulp
-    .src(paths.entry)
-    .pipe(browserify())
-    .pipe(rename({basename: 'app'}))
-    .pipe(gulp.dest(paths.dist))
+  ['login.js'].forEach(function (file) {
+    gulp
+      .src('scripts/routes/' + file)
+      .pipe(browserify())
+      .pipe(gulp.dest('public/js/routes'))
+  })
 })
 
 gulp.task('build:watch', function () {
