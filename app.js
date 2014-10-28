@@ -4,7 +4,6 @@ var cookieParser = require('cookie-parser')
 var expressSession = require('express-session')
 var path = require('path')
 var connect = require('connect')
-var fs = require('fs')
 
 var sessionStore = new connect.session.MemoryStore()
 

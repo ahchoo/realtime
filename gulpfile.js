@@ -7,7 +7,7 @@ var mocha = require('gulp-mocha')
 var paths = {
   entry: 'public/js/index.js',
   client: {
-    scripts: ['public/js/**/*.js', 'public/lib/**/*.js']
+    scripts: ['scripts/**/*.js']
   },
   server: {
     scripts: [

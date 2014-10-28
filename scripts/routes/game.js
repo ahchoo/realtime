@@ -3,8 +3,7 @@ var io = require('socket.io-client')
 var cookie = require('cookie-cutter')
 var _ = require('underscore')
 var window = require('global/window')
-
-var api = require('../lib/api')
+var document = window.document
 
 function GameView(gameId) {
   var self = this
