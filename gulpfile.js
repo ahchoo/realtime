@@ -7,7 +7,7 @@ var mocha = require('gulp-mocha')
 var paths = {
   entry: 'public/js/index.js',
   client: {
-    scripts: ['public/js/**/*.js', 'public/lib/**/*.js']
+    scripts: ['scripts/**/*.js']
   },
   server: {
     scripts: [
@@ -23,11 +23,12 @@ var paths = {
 }
 
 gulp.task('build', function () {
-  gulp
-    .src(paths.entry)
-    .pipe(browserify())
-    .pipe(rename({basename: 'app'}))
-    .pipe(gulp.dest(paths.dist))
+  ['login.js', 'signup.js', 'game.js'].forEach(function (file) {
+    gulp
+      .src('scripts/routes/' + file)
+      .pipe(browserify())
+      .pipe(gulp.dest('public/js/routes'))
+  })
 })
 
 gulp.task('build:watch', function () {

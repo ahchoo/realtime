@@ -4,7 +4,6 @@ var cookieParser = require('cookie-parser')
 var expressSession = require('express-session')
 var path = require('path')
 var connect = require('connect')
-var fs = require('fs')
 
 var sessionStore = new connect.session.MemoryStore()
 
@@ -17,8 +16,6 @@ if (env.is.not.testing) {
 
 var app = express()
 
-app.set('view engine', 'jade')
-
 app.use(bodyParser.urlencoded({
   extended: true
 }))
@@ -30,25 +27,19 @@ app.use(expressSession({
   store: sessionStore
 }))
 
-// api routes
+// templates
+app.set('view engine', 'jade')
+app.set('views', path.join(__dirname, '/views'))
+
+// serve static
+app.use('/vendor', express.static(path.join(__dirname, '/public/vendor')))
+app.use('/js', express.static(path.join(__dirname, '/public/js')))
+
+// routes(api, manage, app)
 app.use(require('./lib/routes'))
 
 // error handling
 app.use(require('./lib/middlewares/error-handler')())
-
-// templates
-app.set('views', path.join(__dirname, '/views'))
-
-// serve static
-app.use('/demo', express.static(path.join(__dirname, '/demo')))
-app.use('/dist', express.static(path.join(__dirname, '/public/dist')))
-app.use('/vendor', express.static(path.join(__dirname, '/public/vendor')))
-app.use('/views', express.static(path.join(__dirname, '/public/views')))
-
-app.use(function (req, res) {
-  var buf = fs.readFileSync('public/index.html')
-  res.send(buf.toString())
-})
 
 app.sessionStore = sessionStore
 

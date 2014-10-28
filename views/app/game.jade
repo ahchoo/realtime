@@ -1,0 +1,27 @@
+extends _layout
+
+block script
+  script(src="/js/routes/game.js")
+
+block content
+  div#game-id(data=game.id)
+
+  div.row
+    div.col-sm-12
+      h2= item.title
+
+  div.row
+    div.col-sm-3
+      ul.list-group(data-bind="foreach: users")
+        li.list-group-item(data-bind="text: name")
+
+    div.col-sm-9
+      p(data-bind="if: owner") The owner is
+        span(data-bind="text: owner")
+
+      div.row
+        div.col-sm-12
+          p(data-bind="text: timeRemaining")
+          button.btn.btn-primary(data-bind="click: betForIt, attr: {disabled: betDisabled}") It's mine!
+          p Times remaining
+            span(data-bind="text: balance")

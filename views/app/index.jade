@@ -1,0 +1,14 @@
+extends _layout
+
+block content
+  h2 Game List
+
+  div.row(style="margin-top: 25px")
+    each game in games
+      div.col-sm-6.col-md-4
+        div.thumbnail
+          div.caption
+            h3= game.item.title
+            p= game.item.description
+            p
+              a.btn.btn-primary.btn-block(href="/games/" + game.id, role="button") Enter
