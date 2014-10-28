@@ -1,5 +1,8 @@
 extends _layout
 
+block script
+  script(src="js/routes/login.js")
+
 block content
   div.row(style="margin-top: 100px")
     div.col-sm-offset-3.col-sm-6
@@ -15,6 +18,3 @@ block content
           button.btn.btn-primary.btn-block(data-bind="click: login") Login to Ahchoo
 
         a.pull-right(href="/signup") Have no account? Sign up here!
-
-block script
-  script(src="js/routes/login.js")
