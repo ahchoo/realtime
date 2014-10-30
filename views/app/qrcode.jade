@@ -1,1 +1,14 @@
-h1 Welcome
+extends _layout
+
+block script
+  script(src='js/routes/qrcode')
+
+block content
+  h1 Welcome to play the game for: #{game.item.title}
+
+  div.row
+    div(role='form')
+      div.form-group
+        input.form-control(type='text', data-bind='textInput: name')
+      div.form-group
+        button.btn.btn-primary.btn-block(data-bind='click: join') Join Game
