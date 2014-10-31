@@ -84,8 +84,6 @@ GameView.prototype.end = function () {
 
 GameView.prototype.addUser = function (user) {
   if (this.findUser(user._id) == null) {
-    console.log('add user')
-
     this.users.push(user)
   }
 }
