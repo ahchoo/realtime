@@ -67,7 +67,7 @@ GameView.prototype.reset = function (user) {
   if (this.tId) {
     clearTimeout(this.tId)
   }
-  if (user._id) {
+  if (user.token === cookie.get('ahchoo_token')) {
     this.balance(this.balance() - 1)
   }
 
