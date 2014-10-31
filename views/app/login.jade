@@ -8,10 +8,14 @@ block content
     div.col-sm-offset-3.col-sm-6
 
       div(role="form")
-        div.form-group
+        .form-group.input-group
+          span.input-group-addon
+            i.fa.fa-envelope
           input.form-control(type="email", data-bind="textInput: email", placeholder="Email")
 
-        div.form-group
+        .form-group.input-group
+          span.input-group-addon
+            i.fa.fa-key
           input.form-control(type="password", data-bind="textInput: password, event: {keypress: loginByKey}", placeholder="Password")
 
         div.form-group

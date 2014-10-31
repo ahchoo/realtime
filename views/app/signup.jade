@@ -2,18 +2,25 @@ extends _layout
 
 block content
 
-  div.row(style="margin-top: 100px")
-    div.col-sm-offset-3.col-sm-6
+  .row(style="margin-top: 100px")
+    .col-sm-offset-3.col-sm-6
       div(role="form")
 
-        div.form-group
+        .form-group.input-group
+          span.input-group-addon
+            i.fa.fa-envelope
           input.form-control(type="email", data-bind="textInput: email", placeholder="Email")
-        div.form-group
+
+        .form-group.input-group
+          span.input-group-addon
+            i.fa.fa-user
           input.form-control(type="text", data-bind="textInput: name", placeholder="The name that will be displayed")
-        div.form-group
+        .form-group.input-group
+          span.input-group-addon
+            i.fa.fa-key
           input.form-control(type="password", data-bind="textInput: password", placeholder="Password")
 
-        div.form-group
+        .form-group
           button.btn.btn-primary.btn-block(data-bind="click: signUp") Sign Up
 
 block script
