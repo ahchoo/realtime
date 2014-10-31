@@ -83,7 +83,11 @@ GameView.prototype.end = function () {
 }
 
 GameView.prototype.addUser = function (user) {
-  this.users.push(user)
+  if (this.findUser(user._id) == null) {
+    console.log('add user')
+
+    this.users.push(user)
+  }
 }
 
 GameView.prototype.addUserCollection = function (users) {
@@ -92,6 +96,18 @@ GameView.prototype.addUserCollection = function (users) {
   _.forEach(users, function (user) {
     self.addUser(user)
   })
+}
+
+GameView.prototype.findUser = function (id) {
+  for (var i = 0; i < this.users().length; i++) {
+    var user = this.users()[i]
+
+    if (user._id === id) {
+      return user
+    }
+  }
+
+  return null
 }
 
 GameView.prototype.removeUser = function (target) {
