@@ -23,7 +23,12 @@ var paths = {
 }
 
 gulp.task('build', function () {
-  ['login.js', 'signup.js', 'game.js'].forEach(function (file) {
+  [
+    'login.js',
+    'logout.js',
+    'signup.js',
+    'game.js'
+  ].forEach(function (file) {
     gulp
       .src('scripts/routes/' + file)
       .pipe(browserify())
