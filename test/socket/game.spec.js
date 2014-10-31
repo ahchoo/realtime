@@ -33,6 +33,14 @@ describe('Realtime game model', function () {
     game.emit.calledWith('player left', {id: 'foo'})
   })
 
+  it('should disallow duplicate player', function () {
+    game.join({id: 'foo'})
+    game.join({id: 'foo'})
+
+    game.players.should.have.length(1)
+    game.emit.calledOnce.should.be.true
+  })
+
   it('should start the game and end in 10s', function () {
     game.start()
 
