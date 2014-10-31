@@ -1,0 +1,16 @@
+extends _layout
+
+block header
+  nav.navbar.navbar-default(role="navigation")
+    .container-fluid
+      .navbar-header
+        a.navbar-brand(href="/") Ahchoo
+
+      .collapse.navbar-collapse
+        ul.nav.navbar-nav.navbar-right
+          li.dropdown
+            a.dropdown-toggle(href="#", data-toggle="dropdown")= user.name + ' '
+              span.caret
+            ul.dropdown-menu(role="menu")
+              li
+                a(href="/logout") Logout
