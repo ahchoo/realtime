@@ -34,6 +34,8 @@ app.set('views', path.join(__dirname, '/views'))
 // serve static
 app.use('/vendor', express.static(path.join(__dirname, '/public/vendor')))
 app.use('/js', express.static(path.join(__dirname, '/public/js')))
+app.use('/css', express.static(path.join(__dirname, '/public/css')))
+app.use('/img', express.static(path.join(__dirname, '/public/img')))
 
 // routes(api, manage, app)
 app.use(require('./lib/routes'))

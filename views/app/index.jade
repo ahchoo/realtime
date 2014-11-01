@@ -1,14 +1,18 @@
 extends _layout_with_banner
 
 block content
-  h2 Game List
-
   div.row(style="margin-top: 25px")
     each game in games
-      div.col-sm-6.col-md-4
+      div.col-md-3.col-sm-4
         div.thumbnail
           div.caption
-            h3= game.item.title
+            h4.item-title= game.item.title
+
+            if game.item.image
+              img.item-image(src="game.item.image")
+            else
+              img.item-image(src="/img/coming-soon.jpg")
+
             p= game.item.description
             p
               a.btn.btn-primary.btn-block(href="/games/" + game.id, role="button") Enter

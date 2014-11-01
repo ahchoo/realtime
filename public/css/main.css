@@ -1,0 +1,25 @@
+body {
+  background-image: url(/img/bg.png);
+}
+
+.navbar {
+  border-radius: 0;
+}
+
+.navbar-default .navbar-toggle {
+  border: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.item-image {
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
+}
+
+.item-title {
+  text-align: center;
+}

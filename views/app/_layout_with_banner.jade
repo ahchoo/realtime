@@ -2,16 +2,21 @@ extends _layout
 
 block header
   nav.navbar.navbar-default(role="navigation")
-    .container-fluid
-      .navbar-header
-        a.navbar-brand(href="/") Ahchoo
+    .navbar-header
+      button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#banner-collapse")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
 
-      .collapse.navbar-collapse
-        ul.nav.navbar-nav.navbar-right
-          li.dropdown
-            a.dropdown-toggle(href="#", data-toggle="dropdown")
-              <i class="fa fa-user"></i> #{user.name} <span class="caret"></span>
-            ul.dropdown-menu(role="menu")
-              li
-                a(href="/logout")
-                  <i class="fa fa-sign-out"></i> Logout
+      a.navbar-brand(href="/") Ahchoo
+
+    #banner-collapse.collapse.navbar-collapse
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle(href="#", data-toggle="dropdown")
+            <i class="fa fa-user"></i> #{user.name} <span class="caret"></span>
+          ul.dropdown-menu(role="menu")
+            li
+              a(href="/logout")
+                <i class="fa fa-sign-out"></i> Logout
