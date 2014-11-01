@@ -27,3 +27,16 @@ img {
 .item-title {
   text-align: center;
 }
+
+/* btn */
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:hover {
+  background-color: #f0ad4e;
+  border-color: #F2AB2A;
+}
+
+.btn-primary:hover {
+  background-color: #e67e22;
+}
