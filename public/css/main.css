@@ -14,10 +14,6 @@ img {
   max-width: 100%;
 }
 
-.item-panel {
-  box-shadow: 0px 3px 12px 0px rgba(50, 50, 50, 0.75);
-}
-
 .item-image {
   max-height: 250px;
   display: block;
