@@ -2,13 +2,16 @@ extends layout
 
 block script
   script(src="/js/routes/game.js")
+  script(src="/js/routes/manage/game.js")
 
 block content
   div#game-id(data=game.id)
   div.page-header
     h1 Game #{ game.item.title }: 
   div.row
-    p Countdown Time: #{ game.countdown }
+    p Countdown Time: #{ game.countdown } second
+  div.row
+    button.btn.btn-primary(data-bind='click: startGame') Start!
   div.row#qrcode
   div.row
     div.col-sm-3
