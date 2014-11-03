@@ -1,33 +1,26 @@
 extends layout
 
-block content
-  div.page-header
-    h1 Test Game
+block script
+  script(src="/js/routes/game.js")
 
+block content
+  div#game-id(data=game.id)
+  div.page-header
+    h1 Game #{ game.item.title }: 
   div.row
-    div.btn-group
-      a(href="#"): button.btn.btn-default
-        span.glyphicon.glyicon-plus
-        | Create Game
+    p Countdown Time: #{ game.countdown }
+  div.row#qrcode
   div.row
-    form.form-horizontal(method="POST")
-      div.form-group
-        label.control-label.col-sm-2
-          span
-          | Item:
-        div.col-sm-10
-          select(name="item")
-            for item in items
-              option(value=item.id) #{ item.title }
-      div.form-group
-        label.control-label.col-sm-2
-          span
-          | Number of Player:
-        div.col-sm-10
-          input(name="capacity", type="number", class='form-control')
-      div.form-group
-        label.control-label.col-sm-2
-          span
-          | Count Time (Seconds):
-        div.col-sm-10
-          input(name="countdown", type="number", class='form-control')
+    div.col-sm-3
+      ul.list-group(data-bind="foreach: users")
+        li.list-group-item(data-bind="text: name")
+
+    div.col-sm-9
+      p(data-bind="if: owner") The owner is
+        span(data-bind="text: owner")
+
+      div.row
+        div.col-sm-12
+          p(data-bind="text: timeRemaining")
+          p Times remaining
+            span(data-bind="text: balance")

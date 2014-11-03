@@ -16,4 +16,4 @@ block content
       tbody
         each game in games
           tr
-            td: a(href="/manage/game/#{game.id}") #{game.item}, #{game.capacity}, #{game.countdown}
+            td: a(href="/manage/games/#{game.id}") #{game.item.title}, #{game.capacity}, #{game.countdown}
