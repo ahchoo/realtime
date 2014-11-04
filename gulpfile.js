@@ -23,29 +23,18 @@ var paths = {
 }
 
 gulp.task('build', function () {
-  (function (callback) {
-    [
-      'login.js',
-      'logout.js',
-      'signup.js',
-      'game.js'
-    ].forEach(function (file) {
-      gulp
-        .src('scripts/routes/' + file)
-        .pipe(browserify())
-        .pipe(gulp.dest('public/js/routes'))
-    }) 
-    callback
-  })(function () {
-      [
-        'game.js'
-      ].forEach(function (file) {
-        gulp
-          .src('scripts/routes/manage/' + file)
-          .pipe(browserify())
-          .pipe(gulp.dest('public/js/routes/manage'))
-      })
-    })
+  [
+    'login.js',
+    'logout.js',
+    'signup.js',
+    'game.js',
+    'manage/game.js'
+  ].forEach(function (file) {
+    gulp
+      .src('scripts/routes/' + file)
+      .pipe(browserify())
+      .pipe(gulp.dest('public/js/routes'))
+  })
 })
 
 gulp.task('build:watch', function () {
