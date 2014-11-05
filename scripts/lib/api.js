@@ -124,6 +124,6 @@ db.reset = function () {
 
 var start = exports.start = new Endpoint('start', '/api/games/:id/start')
 
-exports.start.startGame = function (gameId) {
+start.startGame = function (gameId) {
   return this.get({id: gameId}, {})
 }
