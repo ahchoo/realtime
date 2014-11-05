@@ -37,14 +37,6 @@ gulp.task('build', function () {
     })
     callback()
   })(function () {
-    //[
-    //  'game.js'
-    //].forEach(function (file) {
-    //  gulp
-    //    .src('scripts/routes/manage/' + file)
-    //    .pipe(browserify())
-    //    .pipe(gulp.dest('public/js/routes/manage'))
-    //})
     [
       'game.js'
     ].forEach(function (file) {
