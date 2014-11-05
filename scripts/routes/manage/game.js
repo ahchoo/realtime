@@ -4,12 +4,13 @@ module.exports = function (el) {
   var window = require('global/window')
   var document = window.document
 
-var gameId = document.getElementById('game-id').getAttribute('data')
+  var gameId = document.getElementById('game-id').getAttribute('data')
+
+  console.log(gameId)
 
   ko.applyBindings({
-    startGame: function () {
+    start: function () {
       api.game.start(gameId).then(function () {
-        // the game has started
         console.log('should start that game')
       })
     }
