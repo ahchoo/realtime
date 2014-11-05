@@ -1,7 +1,6 @@
 extends layout
 
 block script
-  script(src="/js/routes/game.js")
   script(src="/js/routes/manage/game.js")
 
 block content
@@ -11,7 +10,7 @@ block content
   div.row
     p Countdown Time: #{ game.countdown } second
   div.row
-    button.btn.btn-primary(data-bind='click: start') Start!
+    button.btn.btn-primary(data-bind='click: startGame') Start!
   div.row#qrcode
   div.row
     div.col-sm-3
