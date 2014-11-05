@@ -136,7 +136,7 @@ GameView.prototype.connectSocket = function () {
 }
 
 GameView.prototype.startGame = function () {
-  api.game.start(this.gameId).then(function () {
+  api.start.startGame(this.gameId).then(function () {
   })
 }
 
