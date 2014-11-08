@@ -11,7 +11,7 @@ function GameView(gameId) {
   this.socket = null
   this.gameId = gameId
   this.timeRemaining = ko.observable()
-  this.started = false
+  this.started = ko.observable(false)
   this.users = ko.observableArray()
   this.owner = ko.observable()
 
@@ -48,6 +48,7 @@ function GameView(gameId) {
 GameView.prototype.start = function () {
   this.countdown = 100
   this.tick()
+  this.started(true);
 }
 
 GameView.prototype.tick = function () {
@@ -117,6 +118,10 @@ GameView.prototype.removeUser = function (target) {
 GameView.prototype.betForIt = function () {
   if (this.balance()) {
     this.socket.emit('game reset')
+
+    var el = arguments[1].currentTarget
+    el.classList.add('active')
+    setTimeout(function () { el.classList.remove('active') }, 200)
   }
 }
 

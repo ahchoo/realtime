@@ -112,12 +112,14 @@ module.exports = function () {
         title: 'Tesla Model S',
         countdown: 100,
         status: 'initialize',
+        description: 'Hello, world!',
         price: 75000
       }, {
         _id: ids.iphone,
         title: 'iPhone 6',
         countdown: 100,
         status: 'initialize',
+        description: 'Bigger than bigger.',
         price: 850
       }
     ]).then(function () {

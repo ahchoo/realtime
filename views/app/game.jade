@@ -4,24 +4,37 @@ block script
   script(src="/js/routes/game.js")
 
 block content
-  div#game-id(data=game.id)
+  #game-id(data=game.id)
 
-  div.row
-    div.col-sm-12
-      h2= item.title
+  .row.mb10
+    .col-xs-4
+      img.img-thumbnail(src=item.image, height="75")
 
-  div.row
-    div.col-sm-3
+    .col-xs-8
+      h4= item.title
+      p= item.description
+      h4 <i class="fa fa-dollar"></i> #{item.price}
+
+  .row
+    .col-xs-12
+      h4 Game Rules
+      p Game is coming, please wait.
+
+  .row
+    .col-xs-12
       ul.list-group(data-bind="foreach: users")
         li.list-group-item(data-bind="text: name")
 
-    div.col-sm-9
-      p(data-bind="if: owner") The owner is
-        span(data-bind="text: owner")
+  .row(data-bind="if: started")
+    .fix-bottom.bet-panel
+      .col-xs-6
+        div <i class="fa fa-clock-o"></i> <span data-bind="text: timeRemaining"></span>s
 
-      div.row
-        div.col-sm-12
-          p(data-bind="text: timeRemaining")
-          button.btn.btn-primary(data-bind="click: betForIt, attr: {disabled: betDisabled}") It's mine!
-          p Times remaining
-            span(data-bind="text: balance")
+      .col-xs-6
+        div.btn-bet(data-bind="click: betForIt")
+          i.fa.fa-gavel.mr8
+            span(data-bind="if: balance() == 3") ...
+            span(data-bind="if: balance() == 2") ..&nbsp;
+            span(data-bind="if: balance() == 1") .&nbsp;&nbsp;
+            span(data-bind="if: balance() == 0") &nbsp;&nbsp;&nbsp;
+          |Tap to bet
