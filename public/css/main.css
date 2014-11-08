@@ -33,7 +33,7 @@ img {
 
 .bet-panel {
   color: #fff;
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
   padding: 15px 0;
 }
@@ -97,10 +97,4 @@ img {
   margin-bottom: 10px;
 }
 
-.mr5 {
-  margin-right: 5px;
-}
-
-.mr8 {
-  margin-right: 8px;
-}
+.mr10 { margin-right: 10px; }
