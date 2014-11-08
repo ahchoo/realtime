@@ -18,6 +18,7 @@ function GameView(gameId) {
   this.owner = ko.observable()
 
   this.balance = ko.observable(3)
+  this.totalBalance = ko.observable(0)
   this.betDisabled = ko.computed(function () {
     return !self.balance()
   })
@@ -88,6 +89,7 @@ GameView.prototype.reset = function (user) {
 
   this.start()
   this.owner(user.name)
+  this.totalBalance(this.totalBalance() - 1)
 }
 
 GameView.prototype.end = function () {
@@ -101,6 +103,7 @@ GameView.prototype.addUser = function (user) {
   if (this.findUser(user._id) == null) {
     this.users.push(user)
   }
+  this.setTotalBalanceBeforeStart()
 }
 
 GameView.prototype.addUserCollection = function (users) {
@@ -127,6 +130,7 @@ GameView.prototype.removeUser = function (target) {
   this.users.remove(function (user) {
     return user._id === target._id
   })
+  this.setTotalBalanceBeforeStart()
 }
 
 GameView.prototype.addAdmin = function (admin) {
@@ -179,6 +183,10 @@ GameView.prototype.connectSocket = function () {
   } else {
     this.socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000', {query: query})
   }
+}
+
+GameView.prototype.setTotalBalanceBeforeStart = function () {
+  this.totalBalance(this.users().length * 3)
 }
 
 GameView.prototype.startGame = function () {
