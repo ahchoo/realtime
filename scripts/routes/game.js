@@ -81,7 +81,7 @@ GameView.prototype.end = function () {
   this.status('ended')
 
   if (this.owner()) {
-    if (this.owner()._id == cookie.get('ahchoo_user_id')) {
+    if (this.owner()._id === cookie.get('ahchoo_user_id')) {
       window.alert('Congrats, you are the winner!')
     } else {
       window.alert(this.owner().name + ' is the winner!')
@@ -130,7 +130,7 @@ GameView.prototype.ownerIsMe = function () {
 }
 
 GameView.prototype.betForIt = function () {
-  if (this.status() == 'started' && this.balance() && !this.ownerIsMe()) {
+  if (this.status() === 'started' && this.balance() && !this.ownerIsMe()) {
     this.socket.emit('game reset')
 
     var el = arguments[1].currentTarget

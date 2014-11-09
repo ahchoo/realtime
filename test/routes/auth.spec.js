@@ -35,7 +35,7 @@ describe('auth api', function () {
         password: md5('123')
       })
       .end(function (err, res) {
-        res.body.should.eql({
+        res.body.should.match({
           data: {
             email: 'test@ahchoo.com',
             name: 'Ahchoo Tech',
