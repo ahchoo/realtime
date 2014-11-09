@@ -11,7 +11,7 @@ function GameView(gameId) {
   this.socket = null
   this.gameId = gameId
   this.timeRemaining = ko.observable()
-  this.started = ko.observable(false)
+  this.status = ko.observable('ready')
   this.users = ko.observableArray()
   this.owner = ko.observable()
 
@@ -48,7 +48,7 @@ function GameView(gameId) {
 GameView.prototype.start = function () {
   this.countdown = 100
   this.tick()
-  this.started(true);
+  this.status('started')
 }
 
 GameView.prototype.tick = function () {
@@ -73,19 +73,27 @@ GameView.prototype.reset = function (user) {
   }
 
   this.start()
-  this.owner(user.name)
+  this.owner(user)
 }
 
 GameView.prototype.end = function () {
   clearTimeout(this.tId)
+  this.status('ended')
+
   if (this.owner()) {
-    window.alert(this.owner() + ' is the winner!')
+    if (this.owner()._id == cookie.get('ahchoo_user_id')) {
+      window.alert('Congrats, you are the winner!')
+    } else {
+      window.alert(this.owner().name + ' is the winner!')
+    }
+  } else {
+    window.alert('Oops, nobody get this.')
   }
 }
 
 GameView.prototype.addUser = function (user) {
   if (this.findUser(user._id) == null) {
-    this.users.push(user)
+    this.users.push(ko.observable(user))
   }
 }
 
@@ -101,7 +109,7 @@ GameView.prototype.findUser = function (id) {
   for (var i = 0; i < this.users().length; i++) {
     var user = this.users()[i]
 
-    if (user._id === id) {
+    if (user()._id === id) {
       return user
     }
   }
@@ -111,12 +119,18 @@ GameView.prototype.findUser = function (id) {
 
 GameView.prototype.removeUser = function (target) {
   this.users.remove(function (user) {
-    return user._id === target._id
+    return user()._id === target._id
   })
 }
 
+GameView.prototype.ownerIsMe = function () {
+  if (this.owner() == null) return false
+
+  return this.owner()._id === cookie.get('ahchoo_user_id')
+}
+
 GameView.prototype.betForIt = function () {
-  if (this.balance()) {
+  if (this.status() == 'started' && this.balance() && !this.ownerIsMe()) {
     this.socket.emit('game reset')
 
     var el = arguments[1].currentTarget

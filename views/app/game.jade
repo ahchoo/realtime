@@ -17,9 +17,12 @@ block content
   .row
     .col-xs-12
       ul.list-group(data-bind="foreach: users")
-        li.list-group-item(data-bind="text: name")
+        li.list-group-item
+          span(data-bind="text: name")
+          span.pull-right(data-bind="if: $parent.owner() && (_id == $parent.owner()._id)")
+            i.fa.fa-flag-checkered
 
-  .row(data-bind="if: started")
+  .row(data-bind="if: status() == 'started'")
     .fix-bottom.bet-panel
       .col-xs-6
         div <i class="fa fa-clock-o"></i> <span data-bind="text: timeRemaining"></span>s

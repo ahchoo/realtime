@@ -18,7 +18,10 @@ ko.applyBindings({
       email: email,
       password: password
     }).then(function (user) {
-      cookie.set('ahchoo_token', user.token, {expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)})
+      var oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+
+      cookie.set('ahchoo_token', user.token, {expires: oneMonth})
+      cookie.set('ahchoo_user_id', user._id, {expires: oneMonth})
 
       location.href = '/'
     })
