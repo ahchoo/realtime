@@ -96,17 +96,19 @@ GameView.prototype.end = function () {
   clearTimeout(this.tId)
   this.status('ended')
 
-  if (this.owner()) {
-    if (this.owner()._id === cookie.get('ahchoo_user_id')) {
-      window.alert('Congrats, you are the winner!')
+  setTimeout(function () {
+    if (this.owner()) {
+      if (this.owner()._id === cookie.get('ahchoo_user_id')) {
+        window.alert('Congrats, you are the winner!')
+      } else {
+        window.alert(this.owner().name + ' is the winner!')
+      }
     } else {
-      window.alert(this.owner().name + ' is the winner!')
+      window.alert('Oops, nobody get this.')
     }
-  } else {
-    window.alert('Oops, nobody get this.')
-  }
 
-  window.location.href = '/'
+    window.location.href = '/'
+  })
 }
 
 GameView.prototype.addUser = function (user) {
