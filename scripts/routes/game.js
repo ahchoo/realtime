@@ -32,21 +32,35 @@ function GameView(gameId) {
     self.removeUser(user)
   })
 
-  this.socket.on('game start', function () {
-    self.start()
+  this.socket.on('game start', function (t) {
+    self.start(t + self.sync.diff)
   })
 
-  this.socket.on('game reset', function (user) {
-    self.reset(user)
+  this.socket.on('game reset', function (user, t) {
+    self.reset(user, t + self.sync.diff)
   })
 
   this.socket.on('game end', function () {
     self.end()
   })
+
+  this.sync = {diff: 0}
+
+  this.socket.on('sync time 1', function (t1) {
+    self.sync.d1 = Date.now() - t1
+
+    self.socket.emit('sync time', Date.now())
+  })
+
+  this.socket.on('sync time 2', function (d2) {
+    self.sync.diff = (d2 - self.sync.d1) / 2
+    self.socket.emit('ready')
+  })
 }
 
-GameView.prototype.start = function () {
-  this.countdown = 100
+GameView.prototype.start = function (t) {
+  this.endTime = t + 10000
+
   this.tick()
   this.status('started')
 }
@@ -55,16 +69,18 @@ GameView.prototype.tick = function () {
   var self = this
 
   this.tId = setTimeout(function () {
-    self.countdown -= 1
-    self.timeRemaining((self.countdown / 10).toFixed(1))
+    var delta = self.endTime - Date.now()
 
-    if (self.countdown > 0) {
+    if (delta > 0) {
+      self.timeRemaining((delta / 1000).toFixed(1))
       self.tick()
+    } else {
+      self.timeRemaining(0)
     }
   }, 100)
 }
 
-GameView.prototype.reset = function (user) {
+GameView.prototype.reset = function (user, t) {
   if (this.tId) {
     clearTimeout(this.tId)
   }
@@ -72,7 +88,7 @@ GameView.prototype.reset = function (user) {
     this.balance(this.balance() - 1)
   }
 
-  this.start()
+  this.start(t)
   this.owner(user)
 }
 
