@@ -105,6 +105,8 @@ GameView.prototype.end = function () {
   } else {
     window.alert('Oops, nobody get this.')
   }
+
+  window.location.href = '/'
 }
 
 GameView.prototype.addUser = function (user) {
