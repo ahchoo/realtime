@@ -96,6 +96,8 @@ GameView.prototype.end = function () {
   clearTimeout(this.tId)
   this.status('ended')
 
+  var self = this
+
   setTimeout(function () {
     if (self.owner()) {
       if (self.owner()._id === cookie.get('ahchoo_user_id')) {
