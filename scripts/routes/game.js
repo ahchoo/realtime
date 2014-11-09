@@ -97,11 +97,11 @@ GameView.prototype.end = function () {
   this.status('ended')
 
   setTimeout(function () {
-    if (this.owner()) {
-      if (this.owner()._id === cookie.get('ahchoo_user_id')) {
+    if (self.owner()) {
+      if (self.owner()._id === cookie.get('ahchoo_user_id')) {
         window.alert('Congrats, you are the winner!')
       } else {
-        window.alert(this.owner().name + ' is the winner!')
+        window.alert(self.owner().name + ' is the winner!')
       }
     } else {
       window.alert('Oops, nobody get this.')
