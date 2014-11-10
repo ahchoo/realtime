@@ -116,11 +116,11 @@ module.exports = function () {
         price: 75000
       }, {
         _id: ids.iphone,
-        title: 'iPhone 6',
+        title: 'Amazon Gift Card',
         countdown: 100,
         status: 'initialize',
         description: 'Bigger than bigger.',
-        price: 850
+        price: 15
       }
     ]).then(function () {
       return ids
