@@ -1,3 +1,3 @@
 Realtime with Webapp
 
-http://realtime-ahchoo.rhcloud.com
+http://www-ahchoo.rhcloud.com
