@@ -1,0 +1,25 @@
+html
+  head
+    link(rel="stylesheet", href="/vendor/bootstrap/dist/css/bootstrap.css")
+  body
+    div.container
+      div.row
+        div hello
+        form.form-horizontal(method="POST")
+          div.form-group
+            label.control-label.col-sm-2
+              span
+              | Username
+            div.col-sm-10
+              input(name="username", class="form-control")
+          div.form-group
+            label.control-label.col-sm-2
+              span
+              | Password
+            div.col-sm-10
+              input(name="password", class="form-control", type="password")
+          div.form-group
+            div.col-sm-offset-2.col-sm-10
+              div.btn-group
+                button.btn.btn-primary(type="submit") Login
+                button.btn.btn-default: a(href="/manage/login") Cancel
