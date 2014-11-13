@@ -15,12 +15,19 @@ html
             li: a(href="/manage/roles") Roles
             li: a(href="/manage/privileges") Privileges
             li: a(href="/manage/games") Game
-            //- li.right: a(href="/manage/login") Login
 
     div.nav-bar.pull-right
       div.navbar-header
       div.navbar-collapse
-        a(href="/manage/login") Login
+        if user
+          div
+            | hello, &nbsp;
+            span #{user.name}
+          div
+            a(href="/manage/logout")
+              | sign out
+        else
+          a(href="/manage/login") Login
 
     div.container
       block content
