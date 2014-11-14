@@ -33,34 +33,20 @@ function GameView(gameId) {
   })
 
   this.socket.on('game start', function (t) {
-    self.start(t + self.sync.diff)
+    self.start(t)
   })
 
   this.socket.on('game reset', function (user, t) {
-    self.reset(user, t + self.sync.diff)
+    self.reset(user, t)
   })
 
   this.socket.on('game end', function () {
     self.end()
   })
-
-  this.sync = {diff: 0}
-
-  this.socket.on('sync time 1', function (t1) {
-    self.sync.d1 = Date.now() - t1
-
-    self.socket.emit('sync time', Date.now())
-  })
-
-  this.socket.on('sync time 2', function (d2) {
-    self.sync.diff = (d2 - self.sync.d1) / 2
-    self.socket.emit('ready')
-  })
 }
 
 GameView.prototype.start = function (t) {
-  this.startTime = t + this.sync.diff
-  this.endTime = this.startTime + 10000
+  this.endTime = t + 10000
 
   this.tick()
   this.status('started')
@@ -101,7 +87,7 @@ GameView.prototype.end = function () {
   if (this.timeRemaining() > 0) {
     setTimeout(function () {
       self.end()
-    }, this.timeRemaining() * 1000)
+    }, this.timeRemaining() * 1000 + 100)
   }
 
   clearTimeout(this.tId)
