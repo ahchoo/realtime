@@ -59,7 +59,8 @@ function GameView(gameId) {
 }
 
 GameView.prototype.start = function (t) {
-  this.endTime = t + 10000
+  this.startTime = t + this.sync.diff
+  this.endTime = this.startTime + 10000
 
   this.tick()
   this.status('started')
@@ -69,10 +70,12 @@ GameView.prototype.tick = function () {
   var self = this
 
   this.tId = setTimeout(function () {
-    var delta = self.endTime - Date.now()
+    var remain = self.endTime - Date.now()
 
-    if (delta > 0) {
-      self.timeRemaining((delta / 1000).toFixed(1))
+    if (remain > 10000) { remain = 10000 }
+
+    if (remain > 0) {
+      self.timeRemaining((remain / 1000).toFixed(1))
       self.tick()
     } else {
       self.timeRemaining(0)
@@ -93,10 +96,16 @@ GameView.prototype.reset = function (user, t) {
 }
 
 GameView.prototype.end = function () {
+  var self = this
+
+  if (this.timeRemaining() > 0) {
+    setTimeout(function () {
+      self.end()
+    }, this.timeRemaining() * 1000)
+  }
+
   clearTimeout(this.tId)
   this.status('ended')
-
-  var self = this
 
   setTimeout(function () {
     if (self.owner()) {
