@@ -22,10 +22,6 @@ block content
           span.pull-right(data-bind="if: $parent.owner() && (_id == $parent.owner()._id)")
             i.fa.fa-flag-checkered
 
-  .row
-    .col-xs-12
-      img.img-thumbnail(src="/img/rules.jpg")
-
   .row(data-bind="if: status() == 'started'")
     .fix-bottom.bet-panel
       .col-xs-6
