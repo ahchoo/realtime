@@ -1,0 +1,25 @@
+html
+  head
+    link(rel="stylesheet", href="/vendor/bootstrap/dist/css/bootstrap.css")
+  body
+    div.container
+      div.row
+        div hello
+        div.form-horizontal
+          div.form-group
+            label.control-label.col-sm-2
+              span
+              | Username
+            div.col-sm-10
+              input.form-control(type="email", data-bind="textInput: email", placeholder="Email")
+          div.form-group
+            label.control-label.col-sm-2
+              span
+              | Password
+            div.col-sm-10
+              input.form-control(type="password", data-bind="textInput: password, event: {keypress: loginByKey}", placeholder="Password")
+          div.form-group
+            div.col-sm-offset-2.col-sm-10
+              div.btn-group
+                button.btn.btn-primary.btn-block(data-bind="click: login") Login to Ahchoo
+    script(src="/js/routes/manage/login.js")

@@ -38,7 +38,9 @@ gulp.task('build', function () {
     callback()
   })(function () {
     [
-      'game.js'
+      'game.js',
+      'login.js',
+      'logout.js'
     ].forEach(function (file) {
       gulp
         .src('scripts/routes/manage/' + file)
