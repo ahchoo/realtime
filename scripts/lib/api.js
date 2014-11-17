@@ -116,6 +116,9 @@ _.forEach({
 var auth = exports.auth = new Endpoint('auth', '/api/auth')
 auth.login = auth.post
 
+var manageAuth = exports.manageAuth = new Endpoint('manageAuth', '/api/auth/manage')
+manageAuth.login = manageAuth.post
+
 var db = exports.db = new Endpoint('db', '/api/db/:action')
 
 db.reset = function () {

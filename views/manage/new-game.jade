@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  div.page-header
+    h1 Add new game:
+  include components/message
+  div.row
+    form.form-horizontal(method="POST")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color: red") *
+          | Item
+        div.col-sm-10
+          select(name='game[item]')
+            each item in items
+              option(value="#{ item.id }") #{ item.title }
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color: red") *
+          | Capacity
+        div.col-sm-10
+          input(name="game[capacity]", type="number", class="form-control", placeholder="Capacity")
+      div.form-group
+        label.control-label.col-sm-2
+          span(style="color: red") *
+          | CountDown
+        div.col-sm-10
+          input(name="game[countdown]", type="number", class="form-control", placeholder="Countdown")
+      div.form-group
+        div.col-sm-offset-2.col-sm-10
+          div.btn-group
+            button.btn.btn-primary(type="submit") OK
+            button.btn.btn-default: a(href="/manage/games/new") Cancel

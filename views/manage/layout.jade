@@ -16,6 +16,19 @@ html
             li: a(href="/manage/privileges") Privileges
             li: a(href="/manage/games") Game
 
+    div.nav-bar.pull-right
+      div.navbar-header
+      div.navbar-collapse
+        if user
+          div
+            | hello, &nbsp;
+            span #{user.name}
+          div
+            a(href="/manage/logout")
+              | sign out
+        else
+          a(href="/manage/login") Login
+
     div.container
       block content
 
