@@ -9,8 +9,8 @@
     "npm": ">= 1.0.0"
   },
   "scripts": {
-    "prepublish": "gulp build",
-    "test": "gulp test"
+    "prepublish": "node_modules/.bin/gulp build",
+    "test": "node_modules/.bin/gulp test"
   },
   "dependencies": {
     "express": "^4.8.5",
