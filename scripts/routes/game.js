@@ -166,7 +166,7 @@ GameView.prototype.connectSocket = function () {
       currentUri.indexOf('localhost') !== -1) {
     this.socket = io.connect('127.0.0.1', {query: query})
   } else {
-    this.socket = io.connect('ws://www-ahchoo.rhcloud.com:8000', {query: query})
+    this.socket = io.connect('ws://app-ahchoo.rhcloud.com:8000', {query: query})
   }
 }
 
