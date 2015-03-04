@@ -33,7 +33,7 @@ module.exports = function () {
   return initCollection('User', [
     {_id: userIds.fu, email: 'fuqcool@gmail.com', name: 'John Fu', password: md5('123')},
     {_id: userIds.test, email: 'test@ahchoo.com', name: 'Fantastic Spiderman', password: md5('husky')},
-    {_id: userIds.admin, email: 'admin@ahchoo.com', name: 'Admin', password: md5('123')}
+    {_id: userIds.admin, email: 'admin@ahchoo.com', name: 'Admin', password: md5('123'), isAdmin: true}
   ]).then(function () {
     // roles
     return initCollection('Role', [{

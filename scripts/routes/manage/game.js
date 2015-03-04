@@ -14,9 +14,11 @@ function GameView(gameId) {
   this.timeRemaining = ko.observable()
   this.started = false
   this.users = ko.observableArray()
+  this.admins = ko.observableArray()
   this.owner = ko.observable()
 
   this.balance = ko.observable(3)
+  this.totalBalance = ko.observable(0)
   this.betDisabled = ko.computed(function () {
     return !self.balance()
   })
@@ -29,6 +31,7 @@ function GameView(gameId) {
       self.addUser(user)
     }
   })
+
   this.socket.on('player left', function (user) {
     self.removeUser(user)
   })
@@ -43,6 +46,18 @@ function GameView(gameId) {
 
   this.socket.on('game end', function () {
     self.end()
+  })
+
+  this.socket.on('admin joined', function (admin) {
+    if (_.isArray(admin)) {
+      self.addAdminCollection(admin)
+    } else {
+      self.addAdmin(admin)
+    }
+  })
+
+  this.socket.on('admin left', function (admin) {
+    self.removeAdmin(admin)
   })
 }
 
@@ -74,6 +89,7 @@ GameView.prototype.reset = function (user) {
 
   this.start()
   this.owner(user.name)
+  this.totalBalance(this.totalBalance() - 1)
 }
 
 GameView.prototype.end = function () {
@@ -87,6 +103,7 @@ GameView.prototype.addUser = function (user) {
   if (this.findUser(user._id) == null) {
     this.users.push(user)
   }
+  this.setTotalBalanceBeforeStart()
 }
 
 GameView.prototype.addUserCollection = function (users) {
@@ -113,6 +130,39 @@ GameView.prototype.removeUser = function (target) {
   this.users.remove(function (user) {
     return user._id === target._id
   })
+  this.setTotalBalanceBeforeStart()
+}
+
+GameView.prototype.addAdmin = function (admin) {
+  if (this.findAdmin(admin._id) == null) {
+    this.admins.push(admin)
+  }
+}
+
+GameView.prototype.addAdminCollection = function (admins) {
+  var self = this
+
+  _.forEach(admins, function(admin) {
+    self.addAdmin(admin)
+  })
+}
+
+GameView.prototype.findAdmin = function (id) {
+  for (var i = 0; i < this.admins().length; i++) {
+    var admin = this.admins()[i]
+
+    if (admin._id === id) {
+      return admin
+    }
+  }
+
+  return null
+}
+
+GameView.prototype.removeAdmin = function (target) {
+  this.admins.remove(function (admin) {
+    return admin._id === target._id
+  })
 }
 
 GameView.prototype.betForIt = function () {
@@ -133,6 +183,10 @@ GameView.prototype.connectSocket = function () {
   } else {
     this.socket = io.connect('ws://realtime-ahchoo.rhcloud.com:8000', {query: query})
   }
+}
+
+GameView.prototype.setTotalBalanceBeforeStart = function () {
+  this.totalBalance(this.users().length * 3)
 }
 
 GameView.prototype.startGame = function () {
